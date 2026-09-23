@@ -42,4 +42,13 @@ This is the feedback step that makes logging worth doing. Keep the tone informat
 - A single missed session or weigh-in is not an issue. Two weeks running below plan is worth one neutral line.
 - Every 4 weeks, remind to measure the waist if `log/body.csv` has no waist value in the last 28 days.
 
+## Setting outcome goals (first review after the ramp-in)
+
+If `goals.md` still says the outcome goals are "Not set yet" and the program is in week 3 or later (`program/plan.json` start date):
+
+1. Take each main lift's best e1RM from weeks 1–2 as its baseline (bench, incline_db, cs_row, cable_row, pulldown, pullup).
+2. Propose a 12-week target for each: after a long layoff, strength comes back fast, so +10–15% e1RM on compounds is realistic; say it is a target, not a prediction.
+3. Replace the "to be set" strength line in `goals.md` with the numbers, and put the week-1 waist in the waist line if it was logged.
+4. Include the `goals.md` change in the same pull request and call it out in the PR body.
+
 Link any claim to its knowledge page (`knowledge/ja/<slug>.md`) instead of re-arguing the evidence.

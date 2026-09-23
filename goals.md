@@ -10,4 +10,8 @@ The weekly review checks progress against this file.
 
 ## Outcome goals (12 weeks from 2026-09-23)
 
-- Set after the first 2 weeks of logging, once there's a baseline. Example: bench press e1RM +5 kg, body weight +0.25% per week.
+Not set yet. Weeks 1–2 are the ramp-in, so they give the baseline. The week-3 review proposes numbers from that baseline in a pull request that edits this section; merge it to accept them.
+
+- Body weight: the 7-day average rises 0.2–0.35 kg per week (small-appetite lean bulk, `program/ja/current.md`).
+- Strength: to be set per main lift from the week-2 e1RM.
+- Waist: measured in week 1, then every 4 weeks.
