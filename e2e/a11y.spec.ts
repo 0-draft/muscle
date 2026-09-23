@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const PAGES = ['', 'ja/', 'k/protein/', 'ja/k/retraining/', 'ja/k/appetite/', 'program/', 'ja/program/', 'grades/'];
+const PAGES = ['', 'ja/', 'k/protein/', 'ja/k/retraining/', 'ja/k/appetite/', 'program/', 'ja/program/', 'progress/', 'ja/progress/', 'grades/', 'ja/grades/'];
 
+// The site is dark-only (an arena), but check both system settings so nothing depends on them.
 for (const scheme of ['light', 'dark'] as const) {
-  test.describe(`${scheme} mode`, () => {
+  test.describe(`${scheme} system setting`, () => {
     test.use({ colorScheme: scheme });
     for (const path of PAGES) {
       test(`/${path} has no WCAG 2.2 AA violations`, async ({ page }) => {

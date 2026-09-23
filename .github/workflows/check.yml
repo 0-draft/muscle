@@ -89,3 +89,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run build
       - run: npm run e2e
+      - name: Accessibility with a populated log (records page, prefilled workout)
+        run: |
+          MUSCLE_LOG_ROOT=e2e/fixtures/demo npm run build
+          npx playwright test e2e/a11y.spec.ts

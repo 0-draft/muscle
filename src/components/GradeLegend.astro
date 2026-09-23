@@ -1,15 +1,15 @@
 ---
-import Plate from './Plate.astro';
+import Lights from './Lights.astro';
 import { GRADES } from '../lib/grades';
-import type { Lang } from '../lib/i18n';
+import { t, type Lang } from '../lib/i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 ---
 <dl class="legend">
   {GRADES.map((g) => (
     <div class="legend-row">
-      <dt><Plate grade={g.id} /><span class="legend-id">{g.id}</span><span class="legend-kg">{g.kg} kg</span></dt>
-      <dd><strong>{g.label[lang]}</strong>{g.meaning[lang]}</dd>
+      <dt><Lights grade={g.id} size="lg" label={t[lang].lightsLabel(g.white)} /><span class="legend-id">{g.id}</span></dt>
+      <dd><strong>{g.label[lang]}</strong><span>{g.meaning[lang]}</span></dd>
     </div>
   ))}
 </dl>

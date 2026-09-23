@@ -12,6 +12,10 @@ import { toString } from 'mdast-util-to-string';
 // an id and back-links to every place it was cited.
 const MARKER = /^\[!([ABCD])\]\s*/;
 
+// Each grade is shown as three referee lights, like a lift on the platform: white = good lift.
+// The count carries the grade, so it never depends on colour alone.
+export const WHITE_LIGHTS = { A: 3, B: 2, C: 1, D: 0 };
+
 // Certainty wording follows GRADE's tested phrasing (Santesso 2020): high / probably / may / very uncertain.
 export const LABELS = {
   en: { A: 'Strong evidence', B: 'Probably true', C: 'May be true', D: 'Uncertain, inference' },
@@ -85,6 +89,17 @@ export default function remarkClaims() {
           hName: 'p',
           hProperties: { className: ['claim-label'] },
           hChildren: [
+            {
+              type: 'element',
+              tagName: 'span',
+              properties: { className: ['lights'], 'aria-hidden': 'true', 'data-white': String(WHITE_LIGHTS[grade]) },
+              children: [0, 1, 2].map((i) => ({
+                type: 'element',
+                tagName: 'i',
+                properties: { className: ['light', i < WHITE_LIGHTS[grade] ? 'good' : 'bad'] },
+                children: [],
+              })),
+            },
             { type: 'element', tagName: 'span', properties: { className: ['claim-letter'] }, children: [{ type: 'text', value: grade }] },
             { type: 'text', value: LABELS[lang][grade] },
           ],

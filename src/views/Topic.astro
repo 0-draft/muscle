@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import GradeStack from '../components/GradeStack.astro';
-import Plate from '../components/Plate.astro';
+import Tally from '../components/Tally.astro';
+import Lights from '../components/Lights.astro';
 import { GRADES } from '../lib/grades';
 import { href, t, type Lang } from '../lib/i18n';
 import { isoDate, knowledgeFor } from '../lib/content';
@@ -22,7 +22,7 @@ const label = Object.fromEntries(GRADES.map((g) => [g.id, g.label[lang]]));
       <a class="back" href={href(lang)}>{s.back}</a>
       <h1>{entry.data.title}</h1>
       <p class="lede">{entry.data.summary}</p>
-      <p class="doc-meta"><GradeStack counts={counts} label={s.breakdown} /><span>{s.lastReviewed} <time datetime={date}>{date}</time></span><a href={href(lang, 'grades/')}>{s.nav.grades}</a></p>
+      <p class="doc-meta"><Tally counts={counts} label={s.breakdown} /><span>{s.lastReviewed} <time datetime={date}>{date}</time></span><a href={href(lang, 'grades/')}>{s.nav.grades}</a></p>
     </header>
     {claims.length > 0 && (
       <details class="sof" open>
@@ -31,7 +31,7 @@ const label = Object.fromEntries(GRADES.map((g) => [g.id, g.label[lang]]));
           {claims.map((c) => (
             <li data-grade={c.grade}>
               <a href={`#${c.id}`}>
-                <Plate grade={c.grade} size={0.6} />
+                <Lights grade={c.grade} size="md" />
                 <span class="sof-grade"><span class="sof-letter">{c.grade}</span>{label[c.grade]}</span>
                 <span class="sof-text">{c.text}</span>
               </a>

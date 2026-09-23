@@ -1,0 +1,53 @@
+---
+// Front and back upper body, each muscle filled by this week's fractional sets against the
+// 8–12 target (chalk white = on target). Legs stay dim: the program leaves them out by choice.
+import { t, type Lang } from '../lib/i18n';
+interface Props { sets: Record<string, number>; lang: Lang }
+const { sets, lang } = Astro.props;
+const names = t[lang].muscles;
+const TARGET = 12;
+const level = (m: string) => Math.min(1, (sets[m] ?? 0) / TARGET);
+const fill = (m: string) => `color-mix(in srgb, var(--chalk) ${Math.round(12 + level(m) * 88)}%, var(--board))`;
+const n = (m: string) => (sets[m] ?? 0).toFixed(Number.isInteger(sets[m] ?? 0) ? 0 : 1);
+// Shapes are deliberately geometric: a scoreboard figure, not an anatomy chart.
+const front = [
+  { m: 'front_delt', d: 'M58 62 q-18 4 -22 26 l16 4 q4 -16 14 -22z M142 62 q18 4 22 26 l-16 4 q-4 -16 -14 -22z' },
+  { m: 'side_delt', d: 'M36 88 q-4 -22 18 -30 l-2 10 q-10 6 -8 22z M164 88 q4 -22 -18 -30 l2 10 q10 6 8 22z' },
+  { m: 'chest', d: 'M68 64 h30 v34 q-18 6 -32 -4 q-4 -18 2 -30z M132 64 h-30 v34 q18 6 32 -4 q4 -18 -2 -30z' },
+  { m: 'biceps', d: 'M38 96 l14 4 l-4 40 l-14 -2z M162 96 l-14 4 l4 40 l14 -2z' },
+];
+const back = [
+  { m: 'rear_delt', d: 'M58 62 q-18 4 -22 26 l16 4 q4 -16 14 -22z M142 62 q18 4 22 26 l-16 4 q-4 -16 -14 -22z' },
+  { m: 'side_delt', d: 'M36 88 q-4 -22 18 -30 l-2 10 q-10 6 -8 22z M164 88 q4 -22 -18 -30 l2 10 q10 6 8 22z' },
+  { m: 'back', d: 'M70 64 h60 l-6 30 l-20 44 h-8 l-20 -44z' },
+  { m: 'triceps', d: 'M38 96 l14 4 l-4 40 l-14 -2z M162 96 l-14 4 l4 40 l14 -2z' },
+];
+const tags = [
+  { m: 'chest', side: 'front', x: 100, y: 84 },
+  { m: 'front_delt', side: 'front', x: 50, y: 70 },
+  { m: 'side_delt', side: 'front', x: 26, y: 70 },
+  { m: 'biceps', side: 'front', x: 30, y: 120 },
+  { m: 'back', side: 'back', x: 100, y: 96 },
+  { m: 'rear_delt', side: 'back', x: 150, y: 70 },
+  { m: 'triceps', side: 'back', x: 170, y: 120 },
+];
+const figure = (side: 'front' | 'back') => (side === 'front' ? front : back);
+---
+<div class="bodymap">
+  {(['front', 'back'] as const).map((side) => (
+    <svg viewBox="0 0 200 250" role="img" aria-label={figure(side).map((p) => `${names[p.m as keyof typeof names]} ${n(p.m)}`).join(', ')}>
+      <circle class="bm-head" cx="100" cy="36" r="18" />
+      <path class="bm-torso" d="M60 60 h80 q8 40 -6 90 h-68 q-14 -50 -6 -90z" />
+      <path class="bm-arm" d="M34 138 l14 2 l-4 44 l-12 -2z M166 138 l-14 2 l4 44 l12 -2z" />
+      <path class="bm-leg" d="M68 154 h30 l-4 90 h-22z M132 154 h-30 l4 90 h22z" />
+      {figure(side).map((p) => <path d={p.d} style={`fill:${fill(p.m)}`} class="bm-muscle" data-muscle={p.m} />)}
+      {tags.filter((g) => g.side === side).map((g) => (
+        <g class="bm-tag" transform={`translate(${g.x} ${g.y})`}>
+          <rect x="-11" y="-8" width="22" height="16" rx="2" />
+          <text y="4.5" text-anchor="middle">{n(g.m)}</text>
+        </g>
+      ))}
+      <text class="bm-side" x="100" y="248" text-anchor="middle">{side === 'front' ? (lang === 'ja' ? '前' : 'FRONT') : lang === 'ja' ? '後' : 'BACK'}</text>
+    </svg>
+  ))}
+</div>

@@ -1,5 +1,5 @@
 ---
-// Client-rendered pointer from the home page into today's workout.
+// Attempt-card pointer from the home page into today's workout (filled in on the client).
 import { plan } from '../lib/plan';
 import { href, t, type Lang } from '../lib/i18n';
 interface Props { lang: Lang }
@@ -24,19 +24,16 @@ const phases = plan.phases.map((p) => ({ weeks: p.weeks, label: p.label[lang] })
     const week = weekFor(new Date());
     let last: string | null = null;
     try {
-      last = localStorage.getItem('muscle:lastDay');
+      last = JSON.parse(localStorage.getItem('muscle:v2:lastDay') ?? 'null');
     } catch {}
     const next = last === 'A' ? 'B' : 'A';
     const main = el.querySelector('[data-today-main]')!;
     const sub = el.querySelector('[data-today-sub]')!;
-    if (week === 0) {
-      main.textContent = `${s.before} ${el.dataset.start}`;
-    } else if (week > weeks) {
-      main.textContent = s.after;
-    } else {
-      const phase = phases.find((p) => p.weeks.includes(week));
-      main.textContent = `${s.week(week, weeks)} · ${lang === 'ja' ? `${next}日` : `Day ${next}`}`;
-      sub.textContent = phase?.label ?? '';
+    if (week === 0) main.textContent = `${s.before} ${el.dataset.start}`;
+    else if (week > weeks) main.textContent = s.after;
+    else {
+      main.textContent = `${lang === 'ja' ? `${next}日` : `Day ${next}`}`;
+      sub.textContent = `${s.week(week, weeks)} · ${phases.find((p) => p.weeks.includes(week))?.label ?? ''}`;
     }
   }
 </script>

@@ -1,11 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import Barbell from '../components/Barbell.astro';
-import GradeStack from '../components/GradeStack.astro';
+import Lights from '../components/Lights.astro';
+import VerdictWall from '../components/VerdictWall.astro';
+import Tally from '../components/Tally.astro';
 import TodayCard from '../components/TodayCard.astro';
-import { addCounts, emptyCounts } from '../lib/grades';
+import { GRADES, addCounts, emptyCounts } from '../lib/grades';
 import { href, t, type Lang } from '../lib/i18n';
-import { isoDate, knowledgeFor } from '../lib/content';
+import { isoDate, knowledgeFor, paperCount } from '../lib/content';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -13,17 +14,26 @@ const s = t[lang];
 const AREAS = ['training', 'nutrition', 'recovery', 'adherence'] as const;
 const rows = await knowledgeFor(lang);
 const total = rows.reduce((acc, r) => addCounts(acc, r.counts), emptyCounts());
-const claims = rows.flatMap((r) =>
-  r.claims.map((c) => ({ ...c, href: href(lang, `k/${r.slug}/#${c.id}`), topic: r.entry.data.title })),
-);
+const claims = rows.flatMap((r) => r.claims.map((c) => ({ ...c, href: href(lang, `k/${r.slug}/#${c.id}`), topic: r.entry.data.title })));
+const papers = await paperCount(lang);
 ---
 <Base lang={lang}>
   <section class="hero">
     <div class="hero-inner">
+      <div class="hero-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="hero-kicker">{s.heroKicker}</p>
       <h1>{s.heroTitle[0]}<br />{s.heroTitle[1]}</h1>
       <p class="lede">{s.heroLede}</p>
-      <Barbell claims={claims} counts={total} lang={lang} />
+      <dl class="hero-tally">
+        {GRADES.map((g) => (
+          <div>
+            <dt><Lights grade={g.id} size="md" label={s.lightsLabel(g.white)} /><span>{g.label[lang]}</span></dt>
+            <dd>{total[g.id]}</dd>
+          </div>
+        ))}
+      </dl>
       <TodayCard lang={lang} />
+      <VerdictWall claims={claims} papers={papers} lang={lang} />
     </div>
   </section>
 
@@ -40,7 +50,7 @@ const claims = rows.flatMap((r) =>
                 <span class="topic-title">{entry.data.title}</span>
                 <span class="topic-summary">{entry.data.summary}</span>
                 <span class="topic-meta">
-                  <GradeStack counts={counts} label={s.breakdown} />
+                  <Tally counts={counts} label={s.breakdown} />
                   <time datetime={isoDate(entry.data.last_reviewed)}>{isoDate(entry.data.last_reviewed)} {s.reviewed}</time>
                 </span>
               </a>

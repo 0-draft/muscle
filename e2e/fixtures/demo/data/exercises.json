@@ -1,0 +1,317 @@
+{
+  "$comment": "Log ids → muscles. primary counts 1 set, secondary 0.5 (Pelland 2026 fractional counting). equipment: barbell | dumbbell | cable | machine | bodyweight.",
+  "bench": {
+    "en": "Bench press",
+    "ja": "ベンチプレス",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "front_delt",
+      "triceps"
+    ],
+    "equipment": "barbell"
+  },
+  "incline_db": {
+    "en": "Incline dumbbell press",
+    "ja": "インクラインダンベルプレス",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "front_delt",
+      "triceps"
+    ],
+    "equipment": "dumbbell"
+  },
+  "incline_bench": {
+    "en": "Incline bench press",
+    "ja": "インクラインベンチプレス",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "front_delt",
+      "triceps"
+    ],
+    "equipment": "barbell"
+  },
+  "dips": {
+    "en": "Dips",
+    "ja": "ディップス",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "front_delt",
+      "triceps"
+    ],
+    "equipment": "bodyweight"
+  },
+  "chest_press": {
+    "en": "Machine chest press",
+    "ja": "マシンチェストプレス",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "front_delt",
+      "triceps"
+    ],
+    "equipment": "machine"
+  },
+  "cable_fly": {
+    "en": "Cable fly",
+    "ja": "ケーブルフライ",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [],
+    "equipment": "cable"
+  },
+  "pec_deck": {
+    "en": "Pec deck",
+    "ja": "ペックデック",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [],
+    "equipment": "machine"
+  },
+  "db_ohp": {
+    "en": "Seated dumbbell shoulder press",
+    "ja": "ダンベルショルダープレス",
+    "primary": [
+      "front_delt"
+    ],
+    "secondary": [
+      "side_delt",
+      "triceps"
+    ],
+    "equipment": "dumbbell"
+  },
+  "machine_ohp": {
+    "en": "Machine shoulder press",
+    "ja": "マシンショルダープレス",
+    "primary": [
+      "front_delt"
+    ],
+    "secondary": [
+      "side_delt",
+      "triceps"
+    ],
+    "equipment": "machine"
+  },
+  "cable_lateral": {
+    "en": "Cable lateral raise",
+    "ja": "ケーブルサイドレイズ",
+    "primary": [
+      "side_delt"
+    ],
+    "secondary": [],
+    "equipment": "cable"
+  },
+  "db_lateral": {
+    "en": "Dumbbell lateral raise",
+    "ja": "ダンベルサイドレイズ",
+    "primary": [
+      "side_delt"
+    ],
+    "secondary": [],
+    "equipment": "dumbbell"
+  },
+  "pullup": {
+    "en": "Pull-up",
+    "ja": "懸垂",
+    "primary": [
+      "back"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "equipment": "bodyweight"
+  },
+  "pulldown": {
+    "en": "Lat pulldown",
+    "ja": "ラットプルダウン",
+    "primary": [
+      "back"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "equipment": "cable"
+  },
+  "single_pulldown": {
+    "en": "Single-arm cable pulldown",
+    "ja": "片手ケーブルプルダウン",
+    "primary": [
+      "back"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "equipment": "cable"
+  },
+  "cs_row": {
+    "en": "Chest-supported row",
+    "ja": "チェストサポートロウ",
+    "primary": [
+      "back"
+    ],
+    "secondary": [
+      "biceps",
+      "rear_delt"
+    ],
+    "equipment": "machine"
+  },
+  "bb_row": {
+    "en": "Barbell row",
+    "ja": "ベントオーバーロウ",
+    "primary": [
+      "back"
+    ],
+    "secondary": [
+      "biceps",
+      "rear_delt"
+    ],
+    "equipment": "barbell"
+  },
+  "seal_row": {
+    "en": "Seal row",
+    "ja": "シールロウ",
+    "primary": [
+      "back"
+    ],
+    "secondary": [
+      "biceps",
+      "rear_delt"
+    ],
+    "equipment": "dumbbell"
+  },
+  "pullover": {
+    "en": "Cable pullover",
+    "ja": "ケーブルプルオーバー",
+    "primary": [
+      "back"
+    ],
+    "secondary": [],
+    "equipment": "cable"
+  },
+  "rear_fly": {
+    "en": "Rear delt fly",
+    "ja": "リアデルトフライ",
+    "primary": [
+      "rear_delt"
+    ],
+    "secondary": [],
+    "equipment": "machine"
+  },
+  "reverse_pec_deck": {
+    "en": "Reverse pec deck",
+    "ja": "リバースペックデック",
+    "primary": [
+      "rear_delt"
+    ],
+    "secondary": [],
+    "equipment": "machine"
+  },
+  "incline_curl": {
+    "en": "Incline dumbbell curl",
+    "ja": "インクラインダンベルカール",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "equipment": "dumbbell"
+  },
+  "bayesian_curl": {
+    "en": "Bayesian cable curl",
+    "ja": "ベイジアンケーブルカール",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "equipment": "cable"
+  },
+  "oh_cable_ext": {
+    "en": "Overhead cable triceps extension",
+    "ja": "オーバーヘッドケーブルエクステンション",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "equipment": "cable"
+  },
+  "oh_db_ext": {
+    "en": "Overhead dumbbell triceps extension",
+    "ja": "オーバーヘッドダンベルエクステンション",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "equipment": "dumbbell"
+  },
+  "leg_press": {
+    "en": "Leg press",
+    "ja": "レッグプレス",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "equipment": "machine"
+  },
+  "hack_squat": {
+    "en": "Hack squat",
+    "ja": "ハックスクワット",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "equipment": "machine"
+  },
+  "rdl": {
+    "en": "Romanian deadlift",
+    "ja": "ルーマニアンデッドリフト",
+    "primary": [
+      "hams",
+      "glutes"
+    ],
+    "secondary": [],
+    "equipment": "barbell"
+  },
+  "seated_curl": {
+    "en": "Seated leg curl",
+    "ja": "シーテッドレッグカール",
+    "primary": [
+      "hams"
+    ],
+    "secondary": [],
+    "equipment": "machine"
+  },
+  "calf_raise": {
+    "en": "Calf raise",
+    "ja": "カーフレイズ",
+    "primary": [
+      "calves"
+    ],
+    "secondary": [],
+    "equipment": "machine"
+  },
+  "cable_row": {
+    "en": "Seated cable row",
+    "ja": "シーテッドケーブルロウ",
+    "primary": [
+      "back"
+    ],
+    "secondary": [
+      "biceps",
+      "rear_delt"
+    ],
+    "equipment": "cable"
+  }
+}

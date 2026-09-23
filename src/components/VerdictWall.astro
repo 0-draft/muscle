@@ -1,0 +1,62 @@
+---
+// Every claim on one board, strongest first. Lights stay dark, then all fire together
+// (referees reveal at once), then each set links to its claim.
+import Lights from './Lights.astro';
+import { GRADES, type Claim } from '../lib/grades';
+import { t, type Lang } from '../lib/i18n';
+
+type Loaded = Claim & { href: string; topic: string };
+interface Props { claims: Loaded[]; papers: number; lang: Lang }
+const { claims, papers, lang } = Astro.props;
+const s = t[lang];
+const order = GRADES.map((g) => g.id);
+const sorted = [...claims].sort((a, b) => order.indexOf(a.grade) - order.indexOf(b.grade));
+const label = Object.fromEntries(GRADES.map((g) => [g.id, g.label[lang]]));
+---
+<figure class="wall" data-wall>
+  <figcaption>
+    <span class="wall-title">{s.wallTitle}</span>
+    <span class="wall-cap">{s.wallCaption(claims.length, papers)}</span>
+  </figcaption>
+  <ol class="wall-grid">
+    {sorted.map((c, i) => (
+      <li style={`--i:${i}`}>
+        <a href={c.href} data-tip-grade={c.grade} data-tip-label={label[c.grade]} data-tip-topic={c.topic} data-tip-text={c.text} aria-label={`${c.grade} ${label[c.grade]}: ${c.text}`}>
+          <Lights grade={c.grade} size="sm" />
+        </a>
+      </li>
+    ))}
+  </ol>
+  <div class="wall-tip" aria-hidden="true" hidden></div>
+</figure>
+
+<script>
+  for (const fig of document.querySelectorAll<HTMLElement>('[data-wall]')) {
+    const tip = fig.querySelector<HTMLElement>('.wall-tip')!;
+    const show = (a: HTMLElement) => {
+      const d = a.dataset;
+      tip.innerHTML = '';
+      const head = document.createElement('p');
+      head.className = 'wall-tip-head';
+      head.textContent = `${d.tipGrade} · ${d.tipLabel} · ${d.tipTopic}`;
+      const body = document.createElement('p');
+      body.textContent = d.tipText ?? '';
+      tip.append(head, body);
+      tip.hidden = false;
+      const box = fig.getBoundingClientRect();
+      const r = a.getBoundingClientRect();
+      tip.style.left = `${Math.max(0, Math.min(r.left - box.left - 140, box.width - tip.offsetWidth))}px`;
+      tip.style.top = `${r.bottom - box.top + 8}px`;
+    };
+    fig.addEventListener('pointerover', (e) => {
+      const a = (e.target as Element).closest<HTMLElement>('a[data-tip-text]');
+      if (a) show(a);
+    });
+    fig.addEventListener('focusin', (e) => {
+      const a = (e.target as Element).closest<HTMLElement>('a[data-tip-text]');
+      if (a) show(a);
+    });
+    fig.addEventListener('pointerleave', () => (tip.hidden = true));
+    fig.addEventListener('focusout', () => (tip.hidden = true));
+  }
+</script>

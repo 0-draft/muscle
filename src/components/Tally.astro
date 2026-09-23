@@ -1,0 +1,12 @@
+---
+// Verdict counts for a topic row: one mini light set per grade that appears, with its count.
+import Lights from './Lights.astro';
+import { GRADES, type Counts, countsLabel } from '../lib/grades';
+interface Props { counts: Counts; label: string }
+const { counts, label } = Astro.props;
+---
+<span class="tally" role="img" aria-label={`${label}: ${countsLabel(counts)}`}>
+  {GRADES.filter((g) => counts[g.id] > 0).map((g) => (
+    <span class="tally-item"><Lights grade={g.id} size="sm" /><b>{counts[g.id]}</b></span>
+  ))}
+</span>

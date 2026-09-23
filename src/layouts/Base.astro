@@ -12,6 +12,7 @@ const home = href(lang);
 const nav = [
   { href: home, label: s.nav.knowledge, match: path === home || path.startsWith(href(lang, 'k/')) },
   { href: href(lang, 'program/'), label: s.nav.program, match: path.startsWith(href(lang, 'program/')) },
+  { href: href(lang, 'progress/'), label: s.nav.progress, match: path.startsWith(href(lang, 'progress/')) },
   { href: href(lang, 'grades/'), label: s.nav.grades, match: path.startsWith(href(lang, 'grades/')) },
 ];
 const abs = (p: string) => new URL(p, Astro.site).href;
@@ -24,7 +25,8 @@ const jaPath = lang === 'ja' ? path : alt;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#16181d" />
+    <meta name="theme-color" content="#0a0a0b" />
+    <meta name="color-scheme" content="dark" />
     <title>{fullTitle}</title>
     <meta name="description" content={description ?? s.description} />
     <link rel="alternate" hreflang="en" href={abs(enPath)} />
@@ -34,13 +36,13 @@ const jaPath = lang === 'ja' ? path : alt;
     <link rel="manifest" href={asset('manifest.webmanifest')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=Dela+Gothic+One&display=swap" rel="stylesheet" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=Big+Shoulders+Display:wght@700;800;900&family=Big+Shoulders+Stencil+Display:wght@800&family=Dela+Gothic+One&display=swap" rel="stylesheet" crossorigin />
   </head>
   <body>
     <a class="skip" href="#main">{s.skip}</a>
     <header class="site-head">
       <a class="brand" href={home}>
-        <svg width="30" height="20" viewBox="0 0 30 20" aria-hidden="true"><rect x="0" y="9" width="30" height="2" rx="1" fill="currentColor"/><rect x="4" y="1" width="5" height="18" rx="1.5" class="brand-plate"/><rect x="21" y="1" width="5" height="18" rx="1.5" class="brand-plate"/></svg>
+        <span class="brand-lights" aria-hidden="true"><i></i><i></i><i></i></span>
         <span>{s.siteName}</span>
       </a>
       <nav aria-label="Main">

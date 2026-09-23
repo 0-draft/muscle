@@ -1,0 +1,180 @@
+---
+// Records page, rebuilt from log/ after every logged session. Compares only against the lifter's
+// own past; no streaks, no missed-week markers.
+import Base from '../layouts/Base.astro';
+import BodyMap from '../components/BodyMap.astro';
+import { exerciseName } from '../lib/plan';
+import { href, t, type Lang } from '../lib/i18n';
+import { allSessions, e1rmHistory, iso, prs, recordsBoard, setsPerMuscle, totalTonnage, weightTrend } from '../lib/progress';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t[lang].progress;
+const muscleNames = t[lang].muscles;
+const sessions = allSessions();
+const empty = sessions.length === 0;
+const today = new Date(`${new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date())}T00:00:00Z`);
+const end = sessions.length && sessions.at(-1)!.date > today ? sessions.at(-1)!.date : today;
+const weekSets = setsPerMuscle(new Date(end.getTime() - 6 * 86400000), end);
+const board = recordsBoard();
+const prList = prs();
+const fmt = (n: number, d = 1) => (Math.round(n * 10 ** d) / 10 ** d).toString();
+const fmtSet = (x: { kg: number; reps: number; rir: number | null; bw?: boolean }) => `${x.bw ? 'BW' : fmt(x.kg)}${x.bw ? '' : ' kg'} × ${x.reps}${x.rir != null ? ` @${x.rir}` : ''}`;
+const dateLabel = (d: Date) => iso(d).slice(5).replace('-', '/');
+
+// e1RM small multiples for main loaded lifts.
+const LIFTS = ['bench', 'incline_db', 'cs_row', 'cable_row', 'pulldown', 'chest_press'];
+const charts = LIFTS.map((id) => ({ id, pts: e1rmHistory(id) })).filter((c) => c.pts.length > 0);
+const chart = (pts: { date: Date; value: number; pr: boolean }[]) => {
+  const W = 300, H = 120, P = 14;
+  const vs = pts.map((p) => p.value);
+  const lo = Math.min(...vs) * 0.97, hi = Math.max(...vs) * 1.03;
+  const x = (i: number) => (pts.length === 1 ? W / 2 : P + (i * (W - 2 * P)) / (pts.length - 1));
+  const y = (v: number) => H - P - ((v - lo) / (hi - lo || 1)) * (H - 2 * P);
+  // Stepped line: a record holds until it is broken.
+  let d = '';
+  pts.forEach((p, i) => (d += i === 0 ? `M${x(i)} ${y(p.value)}` : ` H${x(i)} V${y(p.value)}`));
+  return { W, H, d, dots: pts.map((p, i) => ({ cx: x(i), cy: y(p.value), pr: p.pr, v: p.value, date: p.date })) };
+};
+
+// Calendar: last 12 weeks, Monday-first columns.
+const trained = new Set(sessions.map((x) => iso(x.date)));
+const dow = (d: Date) => (d.getUTCDay() + 6) % 7;
+const lastMonday = new Date(end.getTime() - dow(end) * 86400000);
+const firstMonday = new Date(lastMonday.getTime() - 11 * 7 * 86400000);
+const cal = Array.from({ length: 12 }, (_, w) =>
+  Array.from({ length: 7 }, (_, d) => {
+    const day = new Date(firstMonday.getTime() + (w * 7 + d) * 86400000);
+    return { key: iso(day), on: trained.has(iso(day)), future: day > end };
+  }),
+);
+
+// Body weight: dots + 7-day average.
+const trend = weightTrend();
+const wchart = (() => {
+  if (trend.length < 2) return null;
+  const W = 620, H = 160, P = 18;
+  const t0 = trend[0].date.getTime(), t1 = trend.at(-1)!.date.getTime();
+  const ws = trend.flatMap((p) => [p.weight, p.avg]);
+  const lo = Math.min(...ws) - 0.3, hi = Math.max(...ws) + 0.3;
+  const x = (d: Date) => P + ((d.getTime() - t0) / (t1 - t0 || 1)) * (W - 2 * P);
+  const y = (v: number) => H - P - ((v - lo) / (hi - lo)) * (H - 2 * P);
+  return {
+    W, H,
+    dots: trend.map((p) => ({ cx: x(p.date), cy: y(p.weight) })),
+    line: trend.map((p, i) => `${i ? 'L' : 'M'}${x(p.date).toFixed(1)} ${y(p.avg).toFixed(1)}`).join(' '),
+    lo, hi, last: trend.at(-1)!,
+  };
+})();
+const order = ['chest', 'back', 'front_delt', 'side_delt', 'rear_delt', 'biceps', 'triceps'] as const;
+---
+<Base lang={lang} title={s.title} description={s.lede}>
+  <article class="doc progress">
+    <header class="doc-head">
+      <h1>{s.title}</h1>
+      <p class="lede">{s.lede}</p>
+    </header>
+
+    {empty ? (
+      <div class="empty">
+        <div class="empty-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p>{s.empty}</p>
+        <a class="board-done" href={href(lang, 'program/')}>{s.openProgram}</a>
+      </div>
+    ) : (
+      <>
+        <dl class="odometer">
+          <div><dt>{s.sessions}</dt><dd>{sessions.length}</dd></div>
+          <div><dt>{s.tonnage}</dt><dd>{Math.round(totalTonnage()).toLocaleString()}</dd></div>
+          <div><dt>{s.prCount}</dt><dd>{prList.length}</dd></div>
+        </dl>
+
+        <section class="pg-section" aria-labelledby="pg-records">
+          <h2 id="pg-records">{s.records}</h2>
+          <p class="pg-note">{s.recordsNote}</p>
+          <div class="records" role="region" aria-labelledby="pg-records" tabindex="0">
+            <table>
+              <thead><tr><th scope="col">{s.exercise}</th><th scope="col">{s.best}</th><th scope="col">{s.bestSet}</th><th scope="col">{s.date}</th></tr></thead>
+              <tbody>
+                {board.map((r) => (
+                  <tr>
+                    <th scope="row">{exerciseName(r.id, lang)}</th>
+                    <td class="records-big">{r.set.bw ? '—' : fmt(r.value)}</td>
+                    <td>{fmtSet(r.set)}</td>
+                    <td>{iso(r.date)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="pg-section" aria-labelledby="pg-weekly">
+          <h2 id="pg-weekly">{s.weekly}</h2>
+          <p class="pg-note">{s.weeklyNote}</p>
+          <div class="pg-weekly">
+            <BodyMap sets={weekSets} lang={lang} />
+            <ul class="bars">
+              {order.map((m) => {
+                const v = weekSets[m] ?? 0;
+                return (
+                  <li>
+                    <span class="bars-name">{muscleNames[m]}</span>
+                    <span class="bars-track" aria-hidden="true"><span class="bars-target"></span><span class="bars-fill" style={`width:${Math.min(100, (v / 20) * 100)}%`}></span></span>
+                    <span class="bars-n">{fmt(v)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+
+        {charts.length > 0 && (
+          <section class="pg-section" aria-labelledby="pg-lifts">
+            <h2 id="pg-lifts">{s.lifts}</h2>
+            <div class="lifts">
+              {charts.map((c) => {
+                const g = chart(c.pts);
+                const last = c.pts.at(-1)!;
+                return (
+                  <figure class="lift">
+                    <figcaption><span>{exerciseName(c.id, lang)}</span><b>{fmt(last.value)}<small> kg</small></b></figcaption>
+                    <svg viewBox={`0 0 ${g.W} ${g.H}`} role="img" aria-label={`${exerciseName(c.id, lang)}: ${c.pts.map((p) => `${iso(p.date)} ${fmt(p.value)} kg`).join(', ')}`}>
+                      <path class="lift-line" d={g.d} />
+                      {g.dots.map((p) => <circle class={p.pr ? 'lift-dot is-pr' : 'lift-dot'} cx={p.cx} cy={p.cy} r={p.pr ? 5 : 3.5} />)}
+                    </svg>
+                    <p class="lift-range"><span>{dateLabel(c.pts[0].date)}</span><span>{dateLabel(last.date)}</span></p>
+                  </figure>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        <section class="pg-section" aria-labelledby="pg-cal">
+          <h2 id="pg-cal">{s.calendar}</h2>
+          <p class="pg-note">{s.calendarNote}</p>
+          <div class="cal" role="img" aria-label={`${trained.size} ${s.sessions}`}>
+            {cal.map((week) => (
+              <div class="cal-week">{week.map((d) => <span class={`cal-day${d.on ? ' is-on' : ''}${d.future ? ' is-future' : ''}`} title={d.key}></span>)}</div>
+            ))}
+          </div>
+        </section>
+
+        {wchart && (
+          <section class="pg-section" aria-labelledby="pg-weight">
+            <h2 id="pg-weight">{s.weight}</h2>
+            <p class="pg-note">{s.weightNote}</p>
+            <figure class="weight">
+              <figcaption><b>{fmt(wchart.last.avg, 2)}<small> kg</small></b></figcaption>
+              <svg viewBox={`0 0 ${wchart.W} ${wchart.H}`} role="img" aria-label={`${s.weight}: ${fmt(wchart.last.avg, 2)} kg`}>
+                {wchart.dots.map((p) => <circle class="weight-dot" cx={p.cx} cy={p.cy} r="3" />)}
+                <path class="weight-line" d={wchart.line} />
+              </svg>
+            </figure>
+          </section>
+        )}
+      </>
+    )}
+  </article>
+</Base>

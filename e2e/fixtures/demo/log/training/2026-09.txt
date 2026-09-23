@@ -1,0 +1,68 @@
+2026-09-23 A
+bench 50x9 50x8@3
+cs_row 45x9 45x8@3
+pulldown 45x9 45x8@3
+cable_fly 12.5x9 12.5x8@3
+cable_lateral 7.5x9 7.5x8@3
+incline_curl 10x9 10x8@3
+oh_cable_ext 15x9 15x8@3
+2026-09-26 B
+incline_db 20x9 20x8@3
+pullup bwx9 bwx8@3
+cable_row 45x9 45x8@3
+chest_press 40x9 40x8@3
+db_lateral 8x9 8x8@3
+reverse_pec_deck 25x9 25x8@3
+bayesian_curl 10x9 10x8@3
+oh_db_ext 16x9 16x8@3
+2026-09-30 A
+bench 52.5x10 52.5x9 52.5x8@2
+cs_row 47.5x10 47.5x9 47.5x8@2
+pulldown 47.5x10 47.5x9 47.5x8@2
+cable_fly 13.75x10 13.75x9@2
+cable_lateral 8x10 8x9 8x8@2
+incline_curl 11.25x10 11.25x9@2
+oh_cable_ext 16.25x10 16.25x9@2
+2026-10-03 B
+incline_db 21.25x10 21.25x9 21.25x8@2
+pullup bw+2x10 bw+2x9 bw+2x8@2
+cable_row 47.5x10 47.5x9 47.5x8@2
+chest_press 42.5x10 42.5x9@2
+db_lateral 8.5x10 8.5x9 8.5x8@2
+reverse_pec_deck 26.25x10 26.25x9@2
+bayesian_curl 11.25x10 11.25x9@2
+oh_db_ext 17.25x10 17.25x9@2
+2026-10-07 A
+bench 55x10 55x9 55x8@1
+cs_row 50x10 50x9 50x8@1
+pulldown 50x10 50x9 50x8@1
+cable_fly 15x10 15x9@1
+cable_lateral 8.5x10 8.5x9 8.5x8@1
+incline_curl 12.5x10 12.5x9@1
+oh_cable_ext 17.5x10 17.5x9@1
+2026-10-10 B
+incline_db 22.5x10 22.5x9 22.5x8@1
+pullup bw+5x10 bw+5x9 bw+5x8@1
+cable_row 50x10 50x9 50x8@1
+chest_press 45x10 45x9@1
+db_lateral 9x10 9x9 9x8@1
+reverse_pec_deck 27.5x10 27.5x9@1
+bayesian_curl 12.5x10 12.5x9@1
+oh_db_ext 18.5x10 18.5x9@1
+2026-10-14 A
+bench 57.5x10 57.5x9 57.5x8@0
+cs_row 52.5x10 52.5x9 52.5x8@0
+pulldown 52.5x10 52.5x9 52.5x8@0
+cable_fly 16.25x10 16.25x9@0
+cable_lateral 9x10 9x9 9x8@0
+incline_curl 13.75x10 13.75x9@0
+oh_cable_ext 18.75x10 18.75x9@0
+2026-10-17 B
+incline_db 23.75x10 23.75x9 23.75x8@0
+pullup bw+7x10 bw+7x9 bw+7x8@0
+cable_row 52.5x10 52.5x9 52.5x8@0
+chest_press 47.5x10 47.5x9@0
+db_lateral 9.5x10 9.5x9 9.5x8@0
+reverse_pec_deck 28.75x10 28.75x9@0
+bayesian_curl 13.75x10 13.75x9@0
+oh_db_ext 19.75x10 19.75x9@0

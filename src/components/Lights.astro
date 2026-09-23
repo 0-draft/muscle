@@ -1,0 +1,11 @@
+---
+// Three referee lights. White = good lift. The count of white lights is the grade (A 3 … D 0).
+import { WHITE_LIGHTS } from '../lib/remark-claims.mjs';
+import type { Grade } from '../lib/grades';
+interface Props { grade: Grade; size?: 'sm' | 'md' | 'lg' | 'xl'; label?: string }
+const { grade, size = 'md', label } = Astro.props;
+const white = WHITE_LIGHTS[grade];
+---
+<span class={`lights lights-${size}`} data-white={white} role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : 'true'}>
+  {[0, 1, 2].map((i) => <i class={`light ${i < white ? 'good' : 'bad'}`} />)}
+</span>
