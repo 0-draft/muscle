@@ -1,18 +1,20 @@
 #!/usr/bin/env node
 // Weekly review: parses log/ and prints a markdown summary for the week ending on --end (default today).
-// Usage: node scripts/review.mjs [--end YYYY-MM-DD]
+// Usage: node scripts/review.mjs [--end YYYY-MM-DD] [--root DIR]
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-
-const ROOT = new URL('..', import.meta.url).pathname;
-const exercises = JSON.parse(readFileSync(join(ROOT, 'data/exercises.json'), 'utf8'));
-const PLANNED_SESSIONS = 4;
-const TARGET = { min: 10, max: 20 };
+import { join, resolve } from 'node:path';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
   return i > -1 ? process.argv[i + 1] : undefined;
 };
+
+// --root lets tests point the script at a fixture tree with its own log/ and data/.
+const ROOT = arg('root') ? resolve(arg('root')) : new URL('..', import.meta.url).pathname;
+const exercises = JSON.parse(readFileSync(join(ROOT, 'data/exercises.json'), 'utf8'));
+const PLANNED_SESSIONS = 2;
+// 2-day restart program aims for 8–12 fractional sets per muscle; above 20 adds little (knowledge/volume-frequency).
+const TARGET = { min: 8, max: 20 };
 const day = (s) => new Date(`${s}T00:00:00Z`);
 const iso = (d) => d.toISOString().slice(0, 10);
 const addDays = (d, n) => new Date(d.getTime() + n * 86400000);
@@ -123,7 +125,7 @@ const waist = [...body].reverse().find((b) => b.waist);
 if (waist) out.push(`- Last waist measurement: ${waist.waist} cm on ${iso(waist.date)}`);
 out.push('');
 
-out.push('## Weekly sets per muscle', '', 'Secondary muscles count as 0.5 per set. Target range is 10–20.', '');
+out.push('## Weekly sets per muscle', '', `Secondary muscles count as 0.5 per set. Target range is ${TARGET.min}–${TARGET.max}.`, '');
 out.push('| Muscle | Sets | Status |', '| --- | --- | --- |');
 for (const [m, n] of Object.entries(muscleSets).sort((a, b) => b[1] - a[1])) {
   const status = n < TARGET.min ? 'below range' : n > TARGET.max ? 'above range' : 'in range';

@@ -6,11 +6,27 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "lint": "markdownlint-cli2 \"**/*.md\"",
+    "test": "node --test tests/",
+    "verify-refs": "node scripts/verify-refs.mjs",
+    "review": "node scripts/review.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.1",
     "astro": "^7.3.4",
     "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "markdownlint-cli2": "^0.23.3",
+    "rehype-stringify": "^10.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "typescript": "^6.0.3",
+    "unified": "^11.0.5"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

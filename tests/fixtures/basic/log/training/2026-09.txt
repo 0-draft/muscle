@@ -1,0 +1,8 @@
+2026-09-10 A
+bench 80x8 80x8@2
+2026-09-21 A
+# felt good
+bench 82.5x8 82.5x8@1
+pulldown 60x10 60x10 bw+5x8
+typo 10x10
+bench 80xx8

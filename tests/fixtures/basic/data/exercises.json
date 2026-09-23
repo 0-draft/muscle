@@ -1,0 +1,4 @@
+{
+  "bench": { "en": "Bench press", "ja": "ベンチプレス", "primary": ["chest"], "secondary": ["front_delt", "triceps"] },
+  "pulldown": { "en": "Lat pulldown", "ja": "ラットプルダウン", "primary": ["back"], "secondary": ["biceps"] }
+}
