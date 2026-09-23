@@ -1,0 +1,32 @@
+name: Weekly review
+
+# Monday 07:00 JST: summarize the week that ended Sunday and post it as an issue (phone notification).
+on:
+  schedule:
+    - cron: '0 22 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Summarize and post
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ASSIGNEE: kanywst
+        run: |
+          end=$(TZ=Asia/Tokyo date -d 'yesterday' +%F)
+          week=$(date -d "$end" +%G-W%V)
+          node scripts/review.mjs --end "$end" > review.md
+          for n in $(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search 'in:title "[review]"' --json number --jq '.[].number'); do
+            gh issue close "$n" --repo "$GITHUB_REPOSITORY" --comment "Superseded by the ${week} review."
+          done
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "[review] ${week}" --body-file review.md --assignee "$ASSIGNEE"

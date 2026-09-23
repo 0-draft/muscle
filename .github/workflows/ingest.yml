@@ -1,0 +1,71 @@
+name: Ingest log issue
+
+# "[log] YYYY-MM-DD <day>" and "[weight] YYYY-MM-DD" issues from the site become commits to log/.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    # Public repo: only people with write access may write to the log.
+    if: >-
+      (startsWith(github.event.issue.title, '[log]') || startsWith(github.event.issue.title, '[weight]')) &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Append to log
+        id: ingest
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set +e
+          out=$(node scripts/ingest.mjs)
+          code=$?
+          {
+            echo "message<<EOF_MSG"
+            echo "$out"
+            echo "EOF_MSG"
+          } >> "$GITHUB_OUTPUT"
+          echo "ok=$([ "$code" = 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - name: Commit
+        if: steps.ingest.outputs.ok == 'true'
+        env:
+          MESSAGE: ${{ steps.ingest.outputs.message }}
+          NUMBER: ${{ github.event.issue.number }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git add log
+          git commit -m "chore(log): ${MESSAGE}" -m "From #${NUMBER}"
+          git push
+      - name: Close issue
+        if: steps.ingest.outputs.ok == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MESSAGE: ${{ steps.ingest.outputs.message }}
+          NUMBER: ${{ github.event.issue.number }}
+        run: gh issue close "$NUMBER" --repo "$GITHUB_REPOSITORY" --comment "$MESSAGE"
+      - name: Report problem
+        if: steps.ingest.outputs.ok != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MESSAGE: ${{ steps.ingest.outputs.message }}
+          NUMBER: ${{ github.event.issue.number }}
+        run: |
+          printf "Couldn't log this. Fix the body and open a new issue:\n\n%s\n" "$MESSAGE" > comment.md
+          gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body-file comment.md

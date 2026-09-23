@@ -3,6 +3,7 @@
 // Usage: node scripts/review.mjs [--end YYYY-MM-DD] [--root DIR]
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { SET } from './lib/log-format.mjs';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -42,8 +43,6 @@ const avgWeight = (from, to) => {
 };
 
 // ---- training ----
-// Set token: 80x8, 80x7@1, bwx12, bw+10x8
-const SET = /^(bw(?:\+[\d.]+)?|[\d.]+)x(\d+)(?:@(\d+(?:\.\d+)?))?$/;
 const sessions = [];
 const problems = [];
 const dir = join(ROOT, 'log/training');
