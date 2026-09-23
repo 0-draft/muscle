@@ -5,24 +5,28 @@ on:
   issues:
     types: [opened]
 
-permissions:
-  contents: write
-  issues: write
-
-concurrency:
-  group: ingest
-  cancel-in-progress: false
+permissions: {}
 
 jobs:
   ingest:
-    # Public repo: only people with write access may write to the log.
+    # Public repo, personal log: only the lifter's own issues are processed. author_association is not
+    # enough here (MEMBER covers every org member, COLLABORATOR includes read-only collaborators).
     if: >-
       (startsWith(github.event.issue.title, '[log]') || startsWith(github.event.issue.title, '[weight]')) &&
-      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
+      github.event.issue.user.login == 'kanywst'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    # Job-level so issues that fail the gate never enter the group and can't cancel a queued log.
+    concurrency:
+      group: ingest
+      cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
       - name: Append to log
@@ -34,10 +38,11 @@ jobs:
           set +e
           out=$(node scripts/ingest.mjs)
           code=$?
+          delim="EOF_$(openssl rand -hex 16)"
           {
-            echo "message<<EOF_MSG"
+            echo "message<<${delim}"
             echo "$out"
-            echo "EOF_MSG"
+            echo "${delim}"
           } >> "$GITHUB_OUTPUT"
           echo "ok=$([ "$code" = 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
       - name: Commit
@@ -52,7 +57,11 @@ jobs:
         run: |
           git add log
           git commit -m "chore(log): ${MESSAGE}" -m "From #${NUMBER}"
-          git push
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1
       - name: Close issue
         if: steps.ingest.outputs.ok == 'true'
         env:
@@ -60,8 +69,8 @@ jobs:
           MESSAGE: ${{ steps.ingest.outputs.message }}
           NUMBER: ${{ github.event.issue.number }}
         run: gh issue close "$NUMBER" --repo "$GITHUB_REPOSITORY" --comment "$MESSAGE"
-      - name: Report problem
-        if: steps.ingest.outputs.ok != 'true'
+      - name: Report invalid input
+        if: steps.ingest.outputs.ok == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
           MESSAGE: ${{ steps.ingest.outputs.message }}
@@ -69,3 +78,11 @@ jobs:
         run: |
           printf "Couldn't log this. Fix the body and open a new issue:\n\n%s\n" "$MESSAGE" > comment.md
           gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body-file comment.md
+      - name: Report workflow failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body "The log workflow failed before this was saved. Nothing was written. Details: ${RUN_URL}"
