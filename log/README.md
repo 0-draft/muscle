@@ -7,7 +7,7 @@ Keep each entry under 30 seconds. Log the session before you leave the gym floor
 - **Session**: on the program page, type what you lifted into each exercise's log field, then press "Log this session". A prefilled GitHub issue opens; press Submit.
 - **Weight**: on the program page, enter your weight (and waist every 4 weeks), press "Log weight", then Submit.
 
-`.github/workflows/ingest.yml` validates the issue with `scripts/ingest.mjs`, appends it to the files below, commits, and closes the issue. If something is wrong (unknown exercise id, unreadable set), it comments on the issue instead and writes nothing. Only issues from people with write access are processed.
+`.github/workflows/ingest.yml` validates the issue with `scripts/ingest.mjs`, appends it to the files below, commits, and closes the issue. If something is wrong (unknown exercise id, unreadable set), it comments on the issue instead and writes nothing. Only issues opened by `kanywst` are processed; anyone else's issues are ignored. Logging the same date and day twice is refused, so a double tap does not double the week's volume.
 
 Every Monday at 07:00 JST, `.github/workflows/weekly-review.yml` posts last week's numbers as a `[review]` issue assigned to you.
 

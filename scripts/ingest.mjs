@@ -4,7 +4,7 @@
 // Usage: ISSUE_TITLE='[log] 2026-09-24 A' ISSUE_BODY='bench 60x10 60x10@3' node scripts/ingest.mjs [--root DIR]
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { DAY, checkLiftLine, isRealDate, parseBody } from './lib/log-format.mjs';
+import { DAY, checkLiftLine, isRealDate, normalizeLift, parseBody } from './lib/log-format.mjs';
 
 const i = process.argv.indexOf('--root');
 const ROOT = i > -1 ? resolve(process.argv[i + 1]) : new URL('..', import.meta.url).pathname;
@@ -27,13 +27,18 @@ if (training) {
   const lines = body
     .split('\n')
     .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('#'));
+    .filter((l) => l && !l.startsWith('#'))
+    .map(normalizeLift);
   if (!lines.length) fail('The issue body has no exercise lines.');
   const errors = lines.map((l) => checkLiftLine(l, exercises)).filter(Boolean);
   if (errors.length) fail(errors.join('\n'));
   const file = join(ROOT, 'log/training', `${date.slice(0, 7)}.txt`);
   mkdirSync(join(ROOT, 'log/training'), { recursive: true });
-  const prefix = existsSync(file) && !readFileSync(file, 'utf8').endsWith('\n') ? '\n' : '';
+  const existing = existsSync(file) ? readFileSync(file, 'utf8') : '';
+  // A double tap on "Log this session" opens two issues; the second must not double the week's volume.
+  if (existing.split('\n').some((l) => l.trim() === `${date} ${day}`))
+    fail(`${date} ${day} is already in log/training/${date.slice(0, 7)}.txt. Edit that file directly to change it.`);
+  const prefix = existing && !existing.endsWith('\n') ? '\n' : '';
   appendFileSync(file, `${prefix}${date} ${day}\n${lines.join('\n')}\n`);
   console.log(`Logged ${lines.length} exercises for ${date} ${day} in log/training/${date.slice(0, 7)}.txt`);
 } else if (weigh) {

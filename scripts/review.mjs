@@ -3,7 +3,7 @@
 // Usage: node scripts/review.mjs [--end YYYY-MM-DD] [--root DIR]
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { SET } from './lib/log-format.mjs';
+import { SET, isExercise, tokyoDate } from './lib/log-format.mjs';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -20,7 +20,7 @@ const day = (s) => new Date(`${s}T00:00:00Z`);
 const iso = (d) => d.toISOString().slice(0, 10);
 const addDays = (d, n) => new Date(d.getTime() + n * 86400000);
 
-const end = day(arg('end') ?? iso(new Date()));
+const end = day(arg('end') ?? tokyoDate());
 const weekStart = addDays(end, -6);
 const inRange = (d, from, to) => d >= from && d <= to;
 
@@ -35,8 +35,11 @@ const body = existsSync(join(ROOT, 'log/body.csv'))
         const [date, w, waist] = l.split(',');
         return { date: day(date), weight: w ? Number(w) : null, waist: waist ? Number(waist) : null };
       })
+      .sort((a, b) => a.date - b.date)
   : [];
-const latestWeight = [...body].reverse().find((b) => b.weight)?.weight ?? null;
+// Bodyweight sets use the most recent weigh-in on or before the session, so gaining weight
+// doesn't inflate this week's pull-up e1RM against earlier weeks.
+const weightOn = (date) => [...body].reverse().find((b) => b.weight && b.date <= date)?.weight ?? body.find((b) => b.weight)?.weight ?? 0;
 const avgWeight = (from, to) => {
   const xs = body.filter((b) => b.weight && inRange(b.date, from, to)).map((b) => b.weight);
   return xs.length ? { avg: xs.reduce((a, b) => a + b, 0) / xs.length, n: xs.length } : null;
@@ -61,7 +64,7 @@ for (const f of existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.tx
       }
       const [id, ...tokens] = line.split(/\s+/);
       if (!cur) return problems.push(`${f}:${i + 1} exercise before any session header`);
-      if (!exercises[id]) problems.push(`${f}:${i + 1} unknown exercise id "${id}" (add it to data/exercises.json)`);
+      if (!isExercise(exercises, id)) problems.push(`${f}:${i + 1} unknown exercise id "${id}" (add it to data/exercises.json)`);
       const sets = [];
       for (const tok of tokens) {
         const m = tok.match(SET);
@@ -70,7 +73,7 @@ for (const f of existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.tx
           continue;
         }
         const [, load, reps, rir] = m;
-        const kg = load.startsWith('bw') ? (latestWeight ?? 0) + Number(load.split('+')[1] ?? 0) : Number(load);
+        const kg = load.startsWith('bw') ? weightOn(cur.date) + Number(load.split('+')[1] ?? 0) : Number(load);
         sets.push({ kg, reps: Number(reps), rir: rir === undefined ? null : Number(rir) });
       }
       cur.lifts.push({ id, sets });
@@ -90,8 +93,8 @@ const weekSessions = sessions.filter((s) => inRange(s.date, weekStart, end));
 const muscleSets = {};
 for (const s of weekSessions)
   for (const l of s.lifts) {
+    if (!isExercise(exercises, l.id)) continue;
     const ex = exercises[l.id];
-    if (!ex) continue;
     for (const m of ex.primary) muscleSets[m] = (muscleSets[m] ?? 0) + l.sets.length;
     for (const m of ex.secondary) muscleSets[m] = (muscleSets[m] ?? 0) + 0.5 * l.sets.length;
   }
@@ -141,7 +144,7 @@ for (const id of ids) {
   const before = bestE1rm(id, addDays(weekStart, -14), addDays(weekStart, -1));
   let trend = 'new';
   if (before !== null && now !== null) trend = now > before * 1.005 ? 'up (PR window)' : now < before * 0.97 ? 'down' : 'flat';
-  out.push(`| ${exercises[id]?.en ?? id} | ${fmt(now)} | ${fmt(before)} | ${trend} |`);
+  out.push(`| ${isExercise(exercises, id) ? exercises[id].en : id} | ${fmt(now)} | ${fmt(before)} | ${trend} |`);
 }
 out.push('');
 

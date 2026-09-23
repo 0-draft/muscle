@@ -7,7 +7,7 @@ import { join } from 'node:path';
 
 const fresh = () => {
   const dir = mkdtempSync(join(tmpdir(), 'ingest-'));
-  cpSync('tests/fixtures/basic/data', join(dir, 'data'), { recursive: true });
+  cpSync('data', join(dir, 'data'), { recursive: true }); // real map, including its "$comment" key
   cpSync('tests/fixtures/basic/log', join(dir, 'log'), { recursive: true });
   return dir;
 };
@@ -58,4 +58,30 @@ test('records weight and waist, replacing the same date and keeping rows sorted'
 test('rejects implausible weights', () => {
   const dir = fresh();
   for (const body of ['7', 'seventy', '70.2, 9']) assert.equal(ingest(dir, '[weight] 2026-09-24', body).status, 1, body);
+});
+
+test('refuses a second log for the same date and day', () => {
+  const dir = fresh();
+  assert.equal(ingest(dir, '[log] 2026-10-02 A', 'bench 60x10').status, 0);
+  const r = ingest(dir, '[log] 2026-10-02 A', 'bench 60x10');
+  assert.equal(r.status, 1);
+  assert.match(r.stdout, /already in log\/training\/2026-10.txt/);
+  assert.equal(ingest(dir, '[log] 2026-10-02 B', 'bench 60x10').status, 0, 'a different day is fine');
+});
+
+test('normalizes what a Japanese keyboard produces', () => {
+  const dir = fresh();
+  assert.equal(ingest(dir, '[log] 2026-10-03 A', 'bench ６０×１０、60 x 9 ＠ 2').status, 0);
+  assert.match(readFileSync(join(dir, 'log/training/2026-10.txt'), 'utf8'), /^bench 60x10 60x9@2$/m);
+  assert.equal(ingest(dir, '[weight] 2026-10-03', '７０．２、８２').status, 0);
+  assert.match(readFileSync(join(dir, 'log/body.csv'), 'utf8'), /^2026-10-03,70.2,82$/m);
+});
+
+test('rejects "$comment" and Object.prototype names as exercise ids', () => {
+  const dir = fresh();
+  for (const body of ['constructor 80x8', '$comment 60x5', 'toString 60x5', '__proto__ 60x5']) {
+    const r = ingest(dir, '[log] 2026-10-04 A', body);
+    assert.equal(r.status, 1, body);
+    assert.match(r.stdout, /unknown exercise id/);
+  }
 });
