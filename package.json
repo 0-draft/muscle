@@ -10,7 +10,8 @@
     "lint": "markdownlint-cli2 \"**/*.md\"",
     "test": "node --test \"tests/**/*.test.mjs\"",
     "verify-refs": "node scripts/verify-refs.mjs",
-    "review": "node scripts/review.mjs"
+    "review": "node scripts/review.mjs",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.1",
@@ -20,6 +21,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^24.13.6",
     "markdownlint-cli2": "^0.23.3",
     "rehype-stringify": "^10.0.1",
     "remark-parse": "^11.0.0",
