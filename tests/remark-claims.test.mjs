@@ -64,3 +64,19 @@ test('every knowledge page has the same claim grades in both languages', async (
   assert.deepEqual(readdirSync('knowledge/en').sort(), ja, 'en and ja have the same files');
   for (const f of ja) assert.equal(grades(`knowledge/en/${f}`), grades(`knowledge/ja/${f}`), f);
 });
+
+test('links corporate-author acronyms and repeated years for the same author', async () => {
+  const md = [
+    'Guidance (ACSM 2009). Protein is filling (Westerterp-Plantenga 2009, 2012, 2031).',
+    '',
+    '## References',
+    '',
+    '1. American College of Sports Medicine. 2009. Progression models. *MSSE*. [PMID 1](https://pubmed.ncbi.nlm.nih.gov/1/)',
+    '2. Westerterp-Plantenga MS et al. 2009. A. *J*. [PMID 2](https://pubmed.ncbi.nlm.nih.gov/2/)',
+    '3. Westerterp-Plantenga MS et al. 2012. B. *J*. [PMID 3](https://pubmed.ncbi.nlm.nih.gov/3/)',
+  ].join('\n');
+  const { html } = await render(md);
+  assert.match(html, /<a href="#ref-1"[^>]*>ACSM 2009<\/a>/);
+  assert.match(html, /<a href="#ref-2"[^>]*>Westerterp-Plantenga 2009<\/a>, <a href="#ref-3"[^>]*>2012<\/a>, 2031\)/);
+  assert.match(html, /<li id="ref-3">.*backref/);
+});

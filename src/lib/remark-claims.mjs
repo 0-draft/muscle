@@ -20,9 +20,12 @@ export const LABELS = {
 
 const REF_HEADINGS = new Set(['references', '参考文献']);
 // "Chen TC et al. 2012." / "Murphy C, Koehler K. 2022." / "ACSM. 2009." / "Schoenfeld BJ et al. 2019a."
-const REF_HEAD = /^([A-Z][\p{L}'’-]+)\.?(?:\s+([A-Z]{1,3}))?[^]*?\s(\d{4}[a-z]?)\./u;
+const REF_HEAD = /^([A-Z][\p{L}'’-]+)\.?(?:\s+([A-Z]{1,3})\b)?[^]*?\s(\d{4}[a-z]?)\./u;
+// Corporate authors: "American College of Sports Medicine. 2009." is cited as "ACSM 2009".
+const CORPORATE = /^((?:[A-Z][\p{L}]+|of|and|for|the)(?:\s+(?:[A-Z][\p{L}]+|of|and|for|the)){2,})\.\s+(\d{4}[a-z]?)\./u;
 // "Morton 2018", "Chen TC 2012", "Murphy & Koehler 2022", "Hong & Kim 2018", "Refalo 2025b"
-const CITE = /\b([A-Z][\p{L}'’-]+)(?:\s+([A-Z]{1,3}))?(?:\s+&\s+[A-Z][\p{L}'’-]+)?(?:\s+et al\.)?\s+(\d{4}[a-z]?)\b/gu;
+// A trailing ", 2012" (as in "Westerterp-Plantenga 2009, 2012") cites the same author again.
+const CITE = /\b([A-Z][\p{L}'’-]+)(?:\s+([A-Z]{1,3})\b)?(?:\s+&\s+[A-Z][\p{L}'’-]+)?(?:\s+et al\.)?\s+(\d{4}[a-z]?)((?:,\s*\d{4}[a-z]?)*)\b/gu;
 
 const langOf = (file) => (/[\\/]ja[\\/]/.test(file.path ?? '') ? 'ja' : 'en');
 
@@ -41,10 +44,12 @@ function referenceIndex(tree) {
       const n = entries.length + 1;
       const text = toString(item);
       entries.push({ n, item, text });
+      const corp = text.match(CORPORATE);
       const m = text.match(REF_HEAD);
       if (!m) return;
       const [, surname, initials, year] = m;
-      for (const key of [`${surname} ${year}`, initials && `${surname} ${initials} ${year}`].filter(Boolean)) {
+      const acronym = corp && corp[1].split(/\s+/).filter((w) => /^[A-Z]/.test(w)).map((w) => w[0]).join('');
+      for (const key of [`${surname} ${year}`, initials && `${surname} ${initials} ${year}`, acronym && `${acronym} ${year}`].filter(Boolean)) {
         if (keys.has(key) && keys.get(key) !== n) dupes.add(key);
         else keys.set(key, n);
       }
@@ -96,20 +101,36 @@ export default function remarkClaims() {
         if (node.type !== 'text' || !parent) return;
         const parts = [];
         let last = 0;
-        for (const m of node.value.matchAll(CITE)) {
-          const [whole, surname, initials, year] = m;
-          const n = (initials && keys.get(`${surname} ${initials} ${year}`)) || keys.get(`${surname} ${year}`);
-          if (!n) continue;
+        const link = (n, text) => {
           const uses = (citedFrom.get(n) ?? 0) + 1;
           citedFrom.set(n, uses);
-          if (m.index > last) parts.push({ type: 'text', value: node.value.slice(last, m.index) });
-          parts.push({
+          return {
             type: 'link',
             url: `#ref-${n}`,
             title: entries[n - 1].text,
             data: { hProperties: { className: ['cite'], id: `cite-${n}-${uses}` } },
-            children: [{ type: 'text', value: whole }],
-          });
+            children: [{ type: 'text', value: text }],
+          };
+        };
+        for (const m of node.value.matchAll(CITE)) {
+          const [whole, surname, initials, year, more] = m;
+          const lookup = (y) => (initials && keys.get(`${surname} ${initials} ${y}`)) || keys.get(`${surname} ${y}`);
+          const n = lookup(year);
+          if (!n) continue;
+          if (m.index > last) parts.push({ type: 'text', value: node.value.slice(last, m.index) });
+          const head = whole.slice(0, whole.length - more.length);
+          parts.push(link(n, head));
+          // Each extra year links to its own reference when there is one; otherwise it stays text.
+          for (const piece of more.split(/(?=,)/).filter(Boolean)) {
+            const y = piece.replace(/^,\s*/, '');
+            const extra = lookup(y);
+            if (!extra) {
+              parts.push({ type: 'text', value: piece });
+              continue;
+            }
+            const sep = piece.slice(0, piece.length - y.length);
+            parts.push({ type: 'text', value: sep }, link(extra, y));
+          }
           last = m.index + whole.length;
         }
         if (!parts.length) return;
