@@ -212,9 +212,20 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
     let endsAt = 0;
     let tick = 0;
     let audio: AudioContext | null = null;
-    const beep = () => {
+    // iOS suspends (or "interrupts") the AudioContext when the tab goes to the background, so
+    // resume it inside every tap and again right before beeping.
+    const wakeAudio = () => {
       try {
         audio ??= new AudioContext();
+        if (audio.state !== 'running') void audio.resume();
+      } catch {}
+    };
+    const beep = async () => {
+      navigator.vibrate?.([200, 100, 200]);
+      try {
+        wakeAudio();
+        if (audio && audio.state !== 'running') await audio.resume();
+        if (!audio || audio.state !== 'running') return;
         const o = audio.createOscillator();
         const g = audio.createGain();
         o.frequency.value = 880;
@@ -224,8 +235,10 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
         o.start();
         o.stop(audio.currentTime + 0.4);
       } catch {}
-      navigator.vibrate?.([200, 100, 200]);
     };
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && !timer.hidden) wakeAudio();
+    });
     const stopTimer = () => {
       clearInterval(tick);
       timer.hidden = true;
@@ -234,7 +247,7 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
       const left = Math.round((endsAt - Date.now()) / 1000);
       timeEl.textContent = fmt(left);
       if (left <= 0) {
-        beep();
+        void beep();
         stopTimer();
       }
     };
@@ -244,9 +257,7 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
       clearInterval(tick);
       update();
       tick = window.setInterval(update, 250);
-      try {
-        audio ??= new AudioContext(); // unlock audio inside the tap gesture
-      } catch {}
+      wakeAudio(); // unlock audio inside the tap gesture
     };
     root.querySelector('[data-timer-add]')!.addEventListener('click', () => {
       endsAt += 30000;
