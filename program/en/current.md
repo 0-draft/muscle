@@ -1,105 +1,111 @@
 ---
-title: Current Program
-summary: 4 days a week, with chest/shoulders and back/arms days twice each. Each muscle trained twice a week, 9–16 sets per week (16 for chest and back). No legs for now.
+title: Current Program (2 Days a Week, 12-Week Restart)
+summary: A restart after 3–4 years off. Two full-body (upper-body) sessions a week, training each muscle twice a week. Start light for the first 2 weeks, then train for real from week 3.
 valid_from: 2026-09-23
 ---
 
 ## Assumptions
 
-- 172cm, 70kg, 3–4 years of training, 4 days a week
-- Keep the current split (chest/shoulders ×2, back/arms ×2). Changing splits does not change hypertrophy ([Volume and Frequency](../k/volume-frequency/)), so the familiar setup is best
-- Legs are left out by personal choice ([Skipping Leg Training](../k/legs/))
+- 172cm, 70kg. Trained 4 days a week for 3–4 years, then took 3–4 years off, and now restarting
+- 2 days a week. The goal is to build muscle
+- No legs (personal choice. [Skipping Leg Training](../k/legs/))
+- Small appetite ([Gaining Weight with a Small Appetite](../k/appetite/))
 
-If you have been off for a while, use 2/3 of the sets and stop at RIR 2–3 for the first 2 weeks. Lost muscle comes back quickly.
+## Why it is set up this way
 
-## Weekly layout
+- **2 days a week, full body**: at the same weekly volume, a split and full-body training give the same hypertrophy. With only 2 sessions a week, training every muscle each session lets you hit each one twice a week ([Volume and Frequency](../k/volume-frequency/))
+- **Volume**: 8–12 sets per muscle per week. Returns shrink as volume rises, and 5–10 sets per week is the most efficient. Right after a restart, you can grow on even less
+- **Effort**: RIR 1–2 is enough. Training to failure gives about the same hypertrophy and only adds fatigue ([Effort, Load, and Rest](../k/effort-load-rest/))
+- **Exercises**: prioritize ones that load the muscle in its stretched position ([Range of Motion and Exercise Selection](../k/range-of-motion/))
 
-| Day | Session | Content |
-| --- | --- | --- |
-| Mon | Push A | Chest (heavy), shoulders |
-| Tue | Pull A | Back (vertical pull), biceps, triceps |
-| Wed | Rest | |
-| Thu | Push B | Chest (upper), shoulders |
-| Fri | Pull B | Back (horizontal pull), biceps, triceps |
-| Sat–Sun | Rest | |
+## Schedule
 
-The days are a guide. Just don't do the same session two days in a row.
+Alternate Day A and Day B. Leave at least 2 days between sessions (e.g., Mon A and Thu B, or Tue A and Sat B). Fixed days make it easier to stick with ([A System for Keeping a Log](../k/adherence-logging/)).
 
-## Push A (Mon)
+| Weeks | Goal | Sets | RIR |
+| --- | --- | --- | --- |
+| 1–2 | Ease in. Relearn form and get a feel for the weights | **2 sets** of each exercise in the tables below | 3 (3 reps left) |
+| 3–8 | Main phase | As in the tables below | Compounds 1–2, isolation 0–1 |
+| 9–12 | Push further | If you are still progressing, +1 set each day for lateral raises and arms | Same as above |
 
-| Exercise | Sets | Reps | RIR | Rest |
-| --- | --- | --- | --- | --- |
-| Bench press | 3 | 6–8 | 1–2 | 2–3 min |
-| Incline dumbbell press | 3 | 8–12 | 1–2 | 2 min |
-| Cable fly (full chest stretch) | 2 | 12–15 | 0–1 | 90 sec |
-| Dumbbell shoulder press | 2 | 8–12 | 1–2 | 2 min |
-| Cable lateral raise | 4 | 12–20 | 0–1 | 90 sec |
+In week 1, start with weights that feel easy. After a long break, the soreness from the first session is the worst. From the second session on, the same workout hurts much less.
 
-## Pull A (Tue)
+## Day A
 
 | Exercise | Sets | Reps | RIR | Rest |
 | --- | --- | --- | --- | --- |
-| Weighted pull-up or lat pulldown | 3 | 6–10 | 1–2 | 2–3 min |
+| Bench press | 3 | 6–10 | 1–2 | 2–3 min |
 | Chest-supported row | 3 | 8–12 | 1–2 | 2 min |
-| Single-arm cable pulldown (full stretch at the top) | 2 | 10–15 | 0–1 | 90 sec |
-| Rear delt fly | 3 | 12–20 | 0–1 | 90 sec |
-| Incline dumbbell curl | 3 | 8–12 | 0–1 | 90 sec |
-| Overhead cable extension | 3 | 10–15 | 0–1 | 90 sec |
+| Lat pulldown | 3 | 8–12 | 1–2 | 2 min |
+| Cable fly (full chest stretch) | 2 | 12–15 | 0–1 | 90 sec |
+| Cable lateral raise | 3 | 12–20 | 0–1 | 90 sec |
+| Incline dumbbell curl | 2 | 10–15 | 0–1 | 90 sec |
+| Overhead cable extension | 2 | 10–15 | 0–1 | 90 sec |
 
-## Push B (Thu)
+18 sets total, 60–70 minutes.
 
-| Exercise | Sets | Reps | RIR | Rest |
-| --- | --- | --- | --- | --- |
-| Incline bench press (Smith machine OK) | 3 | 6–10 | 1–2 | 2–3 min |
-| Dips or machine chest press | 3 | 8–12 | 1–2 | 2 min |
-| Pec deck | 2 | 12–15 | 0–1 | 90 sec |
-| Machine shoulder press | 2 | 8–12 | 1–2 | 2 min |
-| Dumbbell lateral raise (lengthened partials OK) | 4 | 12–20 | 0–1 | 90 sec |
-
-## Pull B (Fri)
+## Day B
 
 | Exercise | Sets | Reps | RIR | Rest |
 | --- | --- | --- | --- | --- |
-| Bent-over row or seal row | 3 | 6–10 | 1–2 | 2–3 min |
-| Lat pulldown (wide grip) | 3 | 8–12 | 1–2 | 2 min |
-| Cable pullover | 2 | 12–15 | 0–1 | 90 sec |
-| Reverse pec deck | 3 | 12–20 | 0–1 | 90 sec |
-| Bayesian cable curl | 3 | 10–15 | 0–1 | 90 sec |
-| Overhead dumbbell extension | 3 | 10–15 | 0–1 | 90 sec |
+| Incline dumbbell press | 3 | 8–12 | 1–2 | 2–3 min |
+| Pull-up (assisted or lat pulldown if you can't) | 3 | 6–10 | 1–2 | 2–3 min |
+| Seated cable row | 3 | 8–12 | 1–2 | 2 min |
+| Machine chest press (or dips) | 2 | 8–12 | 1–2 | 2 min |
+| Dumbbell lateral raise | 3 | 12–20 | 0–1 | 90 sec |
+| Reverse pec deck | 2 | 12–20 | 0–1 | 90 sec |
+| Bayesian cable curl | 2 | 10–15 | 0–1 | 90 sec |
+| Overhead dumbbell extension | 2 | 10–15 | 0–1 | 90 sec |
 
-## Weekly sets
+20 sets total, 65–75 minutes. When short on time, drop one set each from the reverse pec deck and the arm exercises.
 
-Synergist muscles counted as 0.5 sets ([Volume and Frequency](../k/volume-frequency/)).
+## Weekly sets (weeks 3–8)
+
+Synergist muscles counted as 0.5 sets.
 
 | Muscle | Direct | Synergist (×0.5) | Total |
 | --- | --- | --- | --- |
-| Chest | 16 | 0 | 16 |
-| Back (lats and mid-back) | 16 | 0 | 16 |
-| Front delts | 4 | 6 (chest presses) | 10 |
-| Side delts | 8 | 2 (shoulder presses) | 10 |
-| Rear delts | 6 | 3 (rows) | 9 |
-| Biceps | 6 | 7 (pulls other than pullovers) | 13 |
-| Triceps | 6 | 8 (all pressing) | 14 |
+| Back | 12 | 0 | 12 |
+| Chest | 10 | 0 | 10 |
+| Biceps | 4 | 6 (pulls) | 10 |
+| Triceps | 4 | 4 (presses) | 8 |
+| Side delts | 6 | 0 | 6 |
+| Rear delts | 2 | 3 (rows) | 5 |
+| Front delts | 0 | 4 (presses) | 4 |
 
-Every muscle except the rear delts (9) falls within 10–20 sets per week. The rear delts are a small muscle that rows also work, so this is enough. Each session takes about 60–75 minutes.
+Every muscle stays at 6 sets or fewer per session. From week 9, add sets for the side and rear delts to bring them to around 8.
 
 ## Progression
 
-- **Double progression**: when every set reaches the top of the rep range at the target RIR, add weight next session. Add 2.5kg on compound lifts, or one step on dumbbells and isolation exercises
-- If an exercise shows no progress in reps or weight for 2 weeks in a row, the weekly review will flag it. First check sleep and food. If it still stalls, drop one set from that exercise or swap it out
-- Deload for 1 week every 6–8 weeks, or when fatigue won't clear. Halve the sets, keep the weight, and use RIR 3
+- **Double progression**: when every set reaches the top of the rep range at the target RIR, add weight next session. Add 2.5kg on barbells, or one step on dumbbells and cables
+- For the first few weeks after a restart, the weight will go up almost every session. This is your old muscle and neural adaptations coming back
+- If an exercise shows no progress in reps or weight for 2 weeks in a row, the weekly review will flag it. First check sleep and food. If it still stalls, swap the exercise
+- After 12 weeks, look at the log and rebuild the program
 
-## Diet and supplements
+## Diet
 
-For details, see [Protein](../k/protein/), [Bulk, Cut, or Recomp](../k/energy-balance/), and [Supplements](../k/supplements/).
+For details, see [Gaining Weight with a Small Appetite](../k/appetite/), [Protein](../k/protein/), and [Supplements](../k/supplements/).
 
-- Protein: **120–150g** a day, split into 4 meals of 30–40g
-- Calories: decide after measuring your waist. Under 84cm, lean bulk (body weight +0.2–0.35kg per week). Otherwise, recomp at maintenance
-- Creatine: 5g daily
-- Sleep: at least 7 hours
+- **Calories**: start at maintenance +300–400 kcal. If your 7-day average weight is not rising by at least 0.2kg per week, add 150–200 kcal every 2–3 weeks. Aim for no more than 0.35kg per week
+- **Protein**: **112–126g** a day (1.6–1.8 g/kg). More than this adds almost no muscle and fills you up, making it harder to hit your total calories
+- **Liquid calories**: they fill you up less than solid food. Adding one of the shakes below a day gives about 700 kcal and about 40g of protein
+- **Creatine**: 5g daily. Put it in the shake
+- **Sleep**: at least 7 hours
+
+Example shake (about 700 kcal, about 42g protein):
+
+| Ingredient | Amount | kcal | Protein |
+| --- | --- | --- | --- |
+| Milk | 400ml | ~270 | 13g |
+| Oats | 40g | ~150 | 5g |
+| Banana | 1 | ~90 | 1g |
+| Peanut butter | 1 tbsp | ~95 | 4g |
+| Whey protein | 1 scoop (25g) | ~100 | 20g |
+
+You often won't feel hungry right after training. Don't wait for hunger. Drink it as soon as you get home.
 
 ## Review schedule
 
-- Weekly: in the weekly review, check volume, progress, and the 7-day average body weight
-- Every 4 weeks: measure your waist and revisit the calorie plan
-- Every 12 weeks: review the whole program. Keep exercises that are progressing and swap out ones that have stalled
+- Weekly: in the weekly review, check sets, progress, and the 7-day average body weight
+- Every 4 weeks: measure your waist (at the navel). If your waist grows 1cm or more per 1kg of weight gained, cut calories a little
+- At 12 weeks: rebuild the whole program

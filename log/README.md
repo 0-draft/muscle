@@ -7,10 +7,10 @@ Keep each entry under 30 seconds. Log the session before you leave the gym floor
 One block per session. A header line with the date and day name, then one line per exercise.
 
 ```text
-2026-09-24 pushA
+2026-09-24 A
 bench 80x8 80x8 80x7@1
 incline_db 30x10 30x10 30x9@1
-cable_fly 15x15 15x14@0
+cs_row 50x12 50x11@2
 cable_lateral 7.5x20 7.5x18 7.5x16 7.5x15@0
 # lines starting with # are notes
 ```

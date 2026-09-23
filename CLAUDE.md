@@ -15,6 +15,6 @@ Evidence-graded hypertrophy notes plus a personal training log. The site (Astro,
 ## Rules
 
 - Never add a citation you have not seen resolve on PubMed or the publisher's page. `verify-refs` runs in CI.
-- The lifter: 172 cm, ~70 kg, 3–4 years trained, 4 days/week (chest+shoulders ×2, back+arms ×2). Legs are excluded by choice; don't push them into the program.
+- The lifter: 172 cm, ~70 kg. Trained 3–4 years (4 days/week, chest+shoulders ×2, back+arms ×2), then stopped for 3–4 years. Restarting in 2026-09 at 2 days/week, goal: build muscle. Small appetite, suspects he's a hardgainer. Legs are excluded by choice; don't push them into the program.
 - Reviews are informational, never scolding. Judge body weight only by the 7-day average.
 - Verify with `npx --yes markdownlint-cli2 "**/*.md" "#node_modules"` and `npm run build` before calling anything done.
