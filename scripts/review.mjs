@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Weekly review: parses log/ and prints a markdown summary for the week ending on --end (default today).
 // Usage: node scripts/review.mjs [--end YYYY-MM-DD] [--root DIR]
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { SET, isExercise, tokyoDate } from './lib/log-format.mjs';
+import { isExercise, tokyoDate } from './lib/log-format.mjs';
+import { addDays, day, e1rm, inRange, iso, muscleSets as countMuscleSets, readBody, readTraining } from './lib/log-data.mjs';
 
 const arg = (name) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -16,72 +17,19 @@ const exercises = JSON.parse(readFileSync(join(ROOT, 'data/exercises.json'), 'ut
 const PLANNED_SESSIONS = 2;
 // 2-day restart program aims for 8–12 fractional sets per muscle; above 20 adds little (knowledge/volume-frequency).
 const TARGET = { min: 8, max: 20 };
-const day = (s) => new Date(`${s}T00:00:00Z`);
-const iso = (d) => d.toISOString().slice(0, 10);
-const addDays = (d, n) => new Date(d.getTime() + n * 86400000);
-
 const end = day(arg('end') ?? tokyoDate());
 const weekStart = addDays(end, -6);
-const inRange = (d, from, to) => d >= from && d <= to;
 
 // ---- body ----
-const body = existsSync(join(ROOT, 'log/body.csv'))
-  ? readFileSync(join(ROOT, 'log/body.csv'), 'utf8')
-      .trim()
-      .split('\n')
-      .slice(1)
-      .filter(Boolean)
-      .map((l) => {
-        const [date, w, waist] = l.split(',');
-        return { date: day(date), weight: w ? Number(w) : null, waist: waist ? Number(waist) : null };
-      })
-      .sort((a, b) => a.date - b.date)
-  : [];
-// Bodyweight sets use the most recent weigh-in on or before the session, so gaining weight
-// doesn't inflate this week's pull-up e1RM against earlier weeks.
-const weightOn = (date) => [...body].reverse().find((b) => b.weight && b.date <= date)?.weight ?? body.find((b) => b.weight)?.weight ?? 0;
+const body = readBody(ROOT);
 const avgWeight = (from, to) => {
   const xs = body.filter((b) => b.weight && inRange(b.date, from, to)).map((b) => b.weight);
   return xs.length ? { avg: xs.reduce((a, b) => a + b, 0) / xs.length, n: xs.length } : null;
 };
 
 // ---- training ----
-const sessions = [];
-const problems = [];
-const dir = join(ROOT, 'log/training');
-for (const f of existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.txt')).sort() : []) {
-  let cur = null;
-  readFileSync(join(dir, f), 'utf8')
-    .split('\n')
-    .forEach((raw, i) => {
-      const line = raw.trim();
-      if (!line || line.startsWith('#')) return;
-      const head = line.match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/);
-      if (head) {
-        cur = { date: day(head[1]), name: head[2], lifts: [] };
-        sessions.push(cur);
-        return;
-      }
-      const [id, ...tokens] = line.split(/\s+/);
-      if (!cur) return problems.push(`${f}:${i + 1} exercise before any session header`);
-      if (!isExercise(exercises, id)) problems.push(`${f}:${i + 1} unknown exercise id "${id}" (add it to data/exercises.json)`);
-      const sets = [];
-      for (const tok of tokens) {
-        const m = tok.match(SET);
-        if (!m) {
-          problems.push(`${f}:${i + 1} can't read set "${tok}"`);
-          continue;
-        }
-        const [, load, reps, rir] = m;
-        const kg = load.startsWith('bw') ? weightOn(cur.date) + Number(load.split('+')[1] ?? 0) : Number(load);
-        sets.push({ kg, reps: Number(reps), rir: rir === undefined ? null : Number(rir) });
-      }
-      cur.lifts.push({ id, sets });
-    });
-}
+const { sessions, problems } = readTraining(ROOT, exercises, body);
 
-// Epley with reps-in-reserve added back; a set without RIR is treated as taken to failure (conservative).
-const e1rm = (s) => s.kg * (1 + (s.reps + (s.rir ?? 0)) / 30);
 const bestE1rm = (id, from, to) => {
   const xs = sessions
     .filter((s) => inRange(s.date, from, to))
@@ -90,14 +38,7 @@ const bestE1rm = (id, from, to) => {
 };
 
 const weekSessions = sessions.filter((s) => inRange(s.date, weekStart, end));
-const muscleSets = {};
-for (const s of weekSessions)
-  for (const l of s.lifts) {
-    if (!isExercise(exercises, l.id)) continue;
-    const ex = exercises[l.id];
-    for (const m of ex.primary) muscleSets[m] = (muscleSets[m] ?? 0) + l.sets.length;
-    for (const m of ex.secondary) muscleSets[m] = (muscleSets[m] ?? 0) + 0.5 * l.sets.length;
-  }
+const muscleSets = countMuscleSets(weekSessions, exercises);
 
 // ---- output ----
 const out = [];

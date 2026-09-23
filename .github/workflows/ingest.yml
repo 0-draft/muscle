@@ -16,6 +16,7 @@ jobs:
       github.event.issue.user.login == 'kanywst'
     runs-on: ubuntu-latest
     permissions:
+      actions: write # dispatch deploy.yml: pushes made with GITHUB_TOKEN don't trigger workflows
       contents: write
       issues: write
     # Job-level so issues that fail the gate never enter the group and can't cancel a queued log.
@@ -69,6 +70,11 @@ jobs:
           MESSAGE: ${{ steps.ingest.outputs.message }}
           NUMBER: ${{ github.event.issue.number }}
         run: gh issue close "$NUMBER" --repo "$GITHUB_REPOSITORY" --comment "$MESSAGE"
+      - name: Rebuild the site with the new log
+        if: steps.ingest.outputs.ok == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref main
       - name: Report invalid input
         if: steps.ingest.outputs.ok == 'false'
         env:

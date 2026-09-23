@@ -1,5 +1,5 @@
 {
-  "$comment": "Log ids → muscles. primary counts 1 set, secondary 0.5 (Pelland 2026 fractional counting).",
+  "$comment": "Log ids → muscles. primary counts 1 set, secondary 0.5 (Pelland 2026 fractional counting). equipment: barbell | dumbbell | cable | machine | bodyweight.",
   "bench": {
     "en": "Bench press",
     "ja": "ベンチプレス",
@@ -9,7 +9,8 @@
     "secondary": [
       "front_delt",
       "triceps"
-    ]
+    ],
+    "equipment": "barbell"
   },
   "incline_db": {
     "en": "Incline dumbbell press",
@@ -20,7 +21,8 @@
     "secondary": [
       "front_delt",
       "triceps"
-    ]
+    ],
+    "equipment": "dumbbell"
   },
   "incline_bench": {
     "en": "Incline bench press",
@@ -31,7 +33,8 @@
     "secondary": [
       "front_delt",
       "triceps"
-    ]
+    ],
+    "equipment": "barbell"
   },
   "dips": {
     "en": "Dips",
@@ -42,7 +45,8 @@
     "secondary": [
       "front_delt",
       "triceps"
-    ]
+    ],
+    "equipment": "bodyweight"
   },
   "chest_press": {
     "en": "Machine chest press",
@@ -53,7 +57,8 @@
     "secondary": [
       "front_delt",
       "triceps"
-    ]
+    ],
+    "equipment": "machine"
   },
   "cable_fly": {
     "en": "Cable fly",
@@ -61,7 +66,8 @@
     "primary": [
       "chest"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "cable"
   },
   "pec_deck": {
     "en": "Pec deck",
@@ -69,7 +75,8 @@
     "primary": [
       "chest"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "machine"
   },
   "db_ohp": {
     "en": "Seated dumbbell shoulder press",
@@ -80,7 +87,8 @@
     "secondary": [
       "side_delt",
       "triceps"
-    ]
+    ],
+    "equipment": "dumbbell"
   },
   "machine_ohp": {
     "en": "Machine shoulder press",
@@ -91,7 +99,8 @@
     "secondary": [
       "side_delt",
       "triceps"
-    ]
+    ],
+    "equipment": "machine"
   },
   "cable_lateral": {
     "en": "Cable lateral raise",
@@ -99,7 +108,8 @@
     "primary": [
       "side_delt"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "cable"
   },
   "db_lateral": {
     "en": "Dumbbell lateral raise",
@@ -107,7 +117,8 @@
     "primary": [
       "side_delt"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "dumbbell"
   },
   "pullup": {
     "en": "Pull-up",
@@ -117,7 +128,8 @@
     ],
     "secondary": [
       "biceps"
-    ]
+    ],
+    "equipment": "bodyweight"
   },
   "pulldown": {
     "en": "Lat pulldown",
@@ -127,7 +139,8 @@
     ],
     "secondary": [
       "biceps"
-    ]
+    ],
+    "equipment": "cable"
   },
   "single_pulldown": {
     "en": "Single-arm cable pulldown",
@@ -137,7 +150,8 @@
     ],
     "secondary": [
       "biceps"
-    ]
+    ],
+    "equipment": "cable"
   },
   "cs_row": {
     "en": "Chest-supported row",
@@ -148,7 +162,8 @@
     "secondary": [
       "biceps",
       "rear_delt"
-    ]
+    ],
+    "equipment": "machine"
   },
   "bb_row": {
     "en": "Barbell row",
@@ -159,7 +174,8 @@
     "secondary": [
       "biceps",
       "rear_delt"
-    ]
+    ],
+    "equipment": "barbell"
   },
   "seal_row": {
     "en": "Seal row",
@@ -170,7 +186,8 @@
     "secondary": [
       "biceps",
       "rear_delt"
-    ]
+    ],
+    "equipment": "dumbbell"
   },
   "pullover": {
     "en": "Cable pullover",
@@ -178,7 +195,8 @@
     "primary": [
       "back"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "cable"
   },
   "rear_fly": {
     "en": "Rear delt fly",
@@ -186,7 +204,8 @@
     "primary": [
       "rear_delt"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "machine"
   },
   "reverse_pec_deck": {
     "en": "Reverse pec deck",
@@ -194,7 +213,8 @@
     "primary": [
       "rear_delt"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "machine"
   },
   "incline_curl": {
     "en": "Incline dumbbell curl",
@@ -202,7 +222,8 @@
     "primary": [
       "biceps"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "dumbbell"
   },
   "bayesian_curl": {
     "en": "Bayesian cable curl",
@@ -210,7 +231,8 @@
     "primary": [
       "biceps"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "cable"
   },
   "oh_cable_ext": {
     "en": "Overhead cable triceps extension",
@@ -218,7 +240,8 @@
     "primary": [
       "triceps"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "cable"
   },
   "oh_db_ext": {
     "en": "Overhead dumbbell triceps extension",
@@ -226,7 +249,8 @@
     "primary": [
       "triceps"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "dumbbell"
   },
   "leg_press": {
     "en": "Leg press",
@@ -236,7 +260,8 @@
     ],
     "secondary": [
       "glutes"
-    ]
+    ],
+    "equipment": "machine"
   },
   "hack_squat": {
     "en": "Hack squat",
@@ -246,7 +271,8 @@
     ],
     "secondary": [
       "glutes"
-    ]
+    ],
+    "equipment": "machine"
   },
   "rdl": {
     "en": "Romanian deadlift",
@@ -255,7 +281,8 @@
       "hams",
       "glutes"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "barbell"
   },
   "seated_curl": {
     "en": "Seated leg curl",
@@ -263,7 +290,8 @@
     "primary": [
       "hams"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "machine"
   },
   "calf_raise": {
     "en": "Calf raise",
@@ -271,7 +299,8 @@
     "primary": [
       "calves"
     ],
-    "secondary": []
+    "secondary": [],
+    "equipment": "machine"
   },
   "cable_row": {
     "en": "Seated cable row",
@@ -282,6 +311,7 @@
     "secondary": [
       "biceps",
       "rear_delt"
-    ]
+    ],
+    "equipment": "cable"
   }
 }
