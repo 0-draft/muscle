@@ -1,4 +1,1 @@
 # Training log for 2026-09. Format: log/README.md
-2026-09-22 A
-bench 40x10 40x10@4
-cs_row 30x12@4
