@@ -15,7 +15,8 @@ const render = async (md, path = 'knowledge/en/x.md') => {
 test('turns graded blockquotes into labelled claims and strips the marker', async () => {
   const { html, counts, claims } = await render('> [!A] Strong claim.\n\n> [!C] Weak claim.\n\n> [!C] Another.');
   assert.match(html, /<blockquote class="claim" data-grade="A" id="claim-1">/);
-  assert.match(html, /<p class="claim-label"><span class="claim-letter">A<\/span>Strong evidence<\/p>\s*<p>Strong claim\.<\/p>/);
+  assert.match(html, /<p class="claim-label"><span class="lights" aria-hidden="true" data-white="3">(<i class="light good"><\/i>){3}<\/span><span class="claim-letter">A<\/span>Strong evidence<\/p>\s*<p>Strong claim\.<\/p>/);
+  assert.match(html, /data-white="1">(<i class="light good"><\/i>){1}(<i class="light bad"><\/i>){2}<\/span><span class="claim-letter">C<\/span>/);
   assert.doesNotMatch(html, /\[!/);
   assert.deepEqual(counts, { A: 1, B: 0, C: 2, D: 0 });
   assert.deepEqual(claims.map((c) => [c.id, c.grade, c.text]), [
