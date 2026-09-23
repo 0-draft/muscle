@@ -119,4 +119,4 @@ Muscle protein synthesis peaks 24 hours after training and is mostly back to bas
 30. Ramos-Campo DJ et al. 2024. Efficacy of Split Versus Full-Body Resistance Training on Strength and Muscle Growth. *J Strength Cond Res*. [PMID 38595233](https://pubmed.ncbi.nlm.nih.gov/38595233/)
 31. Remmert JF et al. 2025. Is There Too Much of a Good Thing? Meta-Regressions of Per-Session Volume. *SportRxiv* (preprint). [doi:10.51224/SRXIV.537](https://doi.org/10.51224/SRXIV.537)
 32. MacDougall JD et al. 1995. The time course for elevated muscle protein synthesis following heavy resistance exercise. *Can J Appl Physiol*. [PMID 8563679](https://pubmed.ncbi.nlm.nih.gov/8563679/)
-33. ACSM. 2009. American College of Sports Medicine position stand. Progression models in resistance training for healthy adults. *Med Sci Sports Exerc*. [PMID 19204579](https://pubmed.ncbi.nlm.nih.gov/19204579/)
+33. American College of Sports Medicine. 2009. American College of Sports Medicine position stand. Progression models in resistance training for healthy adults. *Med Sci Sports Exerc*. [PMID 19204579](https://pubmed.ncbi.nlm.nih.gov/19204579/)
