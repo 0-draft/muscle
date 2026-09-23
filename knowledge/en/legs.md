@@ -22,7 +22,7 @@ No study has looked at visual balance itself. This is a common-sense inference.
 
 > [!B] People who do resistance training have a 10–17% lower risk of all-cause mortality, cardiovascular disease, cancer, and diabetes. The risk reduction peaks at around 30–60 minutes per week.
 
-Meta-analysis of 16 cohort studies (Momma 2022). These are observational studies, so they can't show causation. They also don't distinguish full-body from upper-body-only training. Your current 4 upper-body sessions a week already exceed this amount, so the added benefit of training legs is unknown.
+Meta-analysis of 16 cohort studies (Momma 2022). These are observational studies, so they can't show causation. They also don't distinguish full-body from upper-body-only training. Two 60–75 minute upper-body sessions a week already exceed this amount, so the added benefit of training legs is unknown.
 
 > [!C] Bone only gets stronger where it is loaded. Upper-body training does not put axial load on the hip and spine, the sites that matter clinically.
 
