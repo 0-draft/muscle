@@ -100,6 +100,30 @@ gitとプレーンテキストなら、バッテリー切れも、サブスク�
 
 メタ分析（Halperin 2022）。経験者はRPEと挙上速度の相関が高い（Zourdos 2016）。RIRは、全セットで書くのが面倒なら最終セットだけで十分。
 
+## 記録の見せ方
+
+このサイトのワークアウト画面と記録ページは、この節の知見に沿って作っている。
+
+> [!B] ゲーミフィケーションで身体活動は増えるが、上乗せは小さく、介入が終わると効果はさらに小さくなる。
+
+- 16のRCTのメタ分析で効果量0.42。ただし、比較対象が何らかの介入を受けている群だと0.23、介入終了の約14週後には0.15まで下がった（Mazeas 2022）
+- ジム会員61,293人に54種類の介入を試した大規模研究では、通う回数を増やした介入でも、4週間の期間が終わってから効果が残ったのは8%だけだった。一番効いたのは、休んだあとに戻ってきたことへの小さなご褒美だった（Milkman 2021）
+
+> [!B] 挙上の結果をその場で目に見える形で返すと、パフォーマンスが上がる。口頭より視覚の方が効く。
+
+20研究のメタ分析で、フィードバックはバーの速度を約8.4%上げた。視覚的なフィードバックの効果量は1.11で、口頭の0.47より大きかった（Weakley 2023）。ワークアウト画面で、セットを終えた瞬間に前回との差や自己新記録を出すのはこのため。
+
+> [!C] 途切れたストリークを強調すると、その後の継続が落ちる。ストリークを守るために怪我をしたまま続けた人もいる。
+
+- 7つの研究で、続いている記録を見せると継続が増え、途切れた記録を見せると減った。途切れを自分のせいだと感じるほど影響が大きく、修復できる仕組みがあると小さくなった（Silverman & Barasch 2023）
+- 100日以上のランニングのストリークを終えた17人への聞き取りで、ストリークを守るために怪我をしたまま走った人や、途切れたあとに強い喪失感を覚えた人がいた（Ingalls 2026）
+
+休息もプログラムの一部なので、このサイトには毎日のストリークを置かない。カレンダーはトレーニングした日を示すだけで、休んだ週を「未達」として表示しない。
+
+> [!B] 来たこと自体への報酬は内発的な動機を下げる。能力についての肯定的なフィードバックは内発的な動機を上げる。
+
+128の実験のメタ分析で、取り組んだこと・やり終えたことに対する報酬は、自由選択での内発的動機を下げた（効果量 −0.40、−0.36）。肯定的なフィードバックは上げた（+0.33、Deci 1999）。ポイントやバッジを置かず、記録ページで比べる相手を過去の自分だけにしているのはこのため。
+
 ## 参考文献
 
 1. Harkin B et al. 2016. Does monitoring goal progress promote goal attainment? *Psychol Bull*. [PMID 26479070](https://pubmed.ncbi.nlm.nih.gov/26479070/)
@@ -123,3 +147,9 @@ gitとプレーンテキストなら、バッテリー切れも、サブスク�
 19. McEwan D et al. 2016. The effectiveness of multi-component goal setting interventions for changing physical activity behaviour. *Health Psychol Rev*. [PMID 26445201](https://pubmed.ncbi.nlm.nih.gov/26445201/)
 20. Halperin I et al. 2022. Accuracy in Predicting Repetitions to Task Failure in Resistance Exercise. *Sports Med*. [PMID 34542869](https://pubmed.ncbi.nlm.nih.gov/34542869/)
 21. Zourdos MC et al. 2016. Novel Resistance Training-Specific Rating of Perceived Exertion Scale Measuring Repetitions in Reserve. *J Strength Cond Res*. [PMID 26049792](https://pubmed.ncbi.nlm.nih.gov/26049792/)
+22. Mazeas A et al. 2022. Evaluating the Effectiveness of Gamification on Physical Activity: Systematic Review and Meta-analysis of Randomized Controlled Trials. *J Med Internet Res*. [PMID 34982715](https://pubmed.ncbi.nlm.nih.gov/34982715/)
+23. Milkman KL et al. 2021. Megastudies improve the impact of applied behavioural science. *Nature*. [PMID 34880497](https://pubmed.ncbi.nlm.nih.gov/34880497/)
+24. Weakley J et al. 2023. The Effect of Feedback on Resistance Training Performance and Adaptations: A Systematic Review and Meta-analysis. *Sports Med*. [PMID 37410360](https://pubmed.ncbi.nlm.nih.gov/37410360/)
+25. Silverman J, Barasch A. 2023. On or Off Track: How (Broken) Streaks Affect Consumer Decisions. *J Consum Res* 49(6):1095–1117. [doi:10.1093/jcr/ucac029](https://doi.org/10.1093/jcr/ucac029)
+26. Ingalls EE et al. 2026. The dark side of streaking: Examining the backfire potential of run streaking in recreational runners who broke a long-term streak. *PLoS One*. [PMID 42172224](https://pubmed.ncbi.nlm.nih.gov/42172224/)
+27. Deci EL, Koestner R, Ryan RM. 1999. A meta-analytic review of experiments examining the effects of extrinsic rewards on intrinsic motivation. *Psychol Bull*. [PMID 10589297](https://pubmed.ncbi.nlm.nih.gov/10589297/)

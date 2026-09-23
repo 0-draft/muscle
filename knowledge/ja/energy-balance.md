@@ -58,7 +58,7 @@ FFMI（除脂肪量 ÷ 身長²）が約25という値は、薬物を使って�
 ## 参考文献
 
 1. Helms ER et al. 2023. Effect of Small and Large Energy Surpluses on Strength, Muscle, and Skinfold Thickness in Resistance-Trained Individuals: A Parallel Groups Design. *Sports Med Open*. [PMID 37914977](https://pubmed.ncbi.nlm.nih.gov/37914977/)
-2. Ribeiro AS et al. 2019. Effect of Different Dietary Energy Intake Following Resistance Training on Muscle Mass and Body Fat in Bodybuilders: A Pilot Study. *J Hum Kinet*. [PMID 31915482](https://pubmed.ncbi.nlm.nih.gov/31915482/)
+2. Ribeiro AS et al. 2019. Effects of Different Dietary Energy Intake Following Resistance Training on Muscle Mass and Body Fat in Bodybuilders: A Pilot Study. *J Hum Kinet*. [PMID 31915482](https://pubmed.ncbi.nlm.nih.gov/31915482/)
 3. Slater GJ et al. 2019. Is an Energy Surplus Required to Maximize Skeletal Muscle Hypertrophy Associated with Resistance Training. *Front Nutr*. [PMID 31482093](https://pubmed.ncbi.nlm.nih.gov/31482093/)
 4. Iraki J et al. 2019. Nutrition Recommendations for Bodybuilders in the Off-Season: A Narrative Review. *Sports (Basel)*. [PMID 31247944](https://pubmed.ncbi.nlm.nih.gov/31247944/)
 5. Murphy C, Koehler K. 2022. Energy deficiency impairs resistance training gains in lean mass but not strength: A meta-analysis and meta-regression. *Scand J Med Sci Sports*. [PMID 34623696](https://pubmed.ncbi.nlm.nih.gov/34623696/)

@@ -14,14 +14,14 @@ const files = ['knowledge', 'program'].flatMap((top) =>
 );
 
 // Reference lines look like: `1. Morton RW et al. 2018. Title... [PMID 28698222](...)`
-const REF = /^\s*\d+\.\s+(.+?)\s+(\d{4})[a-z]?\.\s.*\[PMID (\d+)\]/;
+const REF = /^\s*\d+\.\s+(.+?)\s+(\d{4})[a-z]?\.\s+(.*?)\s+\*.*\[PMID (\d+)\]/;
 const refs = [];
 for (const f of files)
   readFileSync(join(ROOT, f), 'utf8')
     .split('\n')
     .forEach((line, i) => {
       const m = line.match(REF);
-      if (m) refs.push({ where: `${f}:${i + 1}`, authors: m[1], year: m[2], pmid: m[3] });
+      if (m) refs.push({ where: `${f}:${i + 1}`, authors: m[1], year: m[2], title: m[3], pmid: m[4] });
     });
 
 const pmids = [...new Set(refs.map((r) => r.pmid))];
@@ -49,6 +49,12 @@ for (const r of refs) {
   const years = [s.pubdate, s.epubdate].map((d) => (d ?? '').slice(0, 4)).filter(Boolean);
   if (surname && !norm(r.authors).includes(surname))
     failures.push(`${r.where} PMID ${r.pmid}: first author on PubMed is "${s.sortfirstauthor}", reference says "${r.authors}"`);
+  // Titles may be shortened, but what we wrote must be the start of PubMed's title (or vice versa).
+  const words = (t) => norm(t).replace(/<[^>]+>/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+  const ours = words(r.title);
+  const theirs = words(s.title ?? '');
+  if (ours && theirs && !theirs.startsWith(ours) && !ours.startsWith(theirs))
+    failures.push(`${r.where} PMID ${r.pmid}: title on PubMed is "${s.title}", reference says "${r.title}"`);
   if (years.length && !years.some((y) => Math.abs(Number(y) - Number(r.year)) <= 1))
     failures.push(`${r.where} PMID ${r.pmid}: PubMed year ${years.join('/')}, reference says ${r.year}`);
 }

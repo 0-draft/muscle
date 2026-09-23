@@ -100,6 +100,30 @@ Use two layers of goals.
 
 Meta-analysis (Halperin 2022). In experienced lifters, RPE correlates strongly with lifting velocity (Zourdos 2016). If writing RIR for every set is a chore, the last set is enough.
 
+## How progress is shown
+
+The workout screen and the records page on this site are built on the findings in this section.
+
+> [!B] Gamification increases physical activity, but the added effect is small and shrinks further once the intervention ends.
+
+- A meta-analysis of 16 RCTs found an effect size of 0.42. Against active control groups it was 0.23, and about 14 weeks after the intervention ended it was 0.15 (Mazeas 2022)
+- A megastudy of 54 interventions in 61,293 gym members found that only 8% of the interventions that raised visits kept working after the 4-week program. The best one was a small reward for coming back after a missed workout (Milkman 2021)
+
+> [!B] Showing lifting results visually, right away, improves performance. Visual feedback works better than verbal.
+
+A meta-analysis of 20 studies found that feedback raised bar velocity by about 8.4%. Visual feedback had an effect size of 1.11, verbal 0.47 (Weakley 2023). That is why the workout screen shows the difference from last time and any personal record the moment a set is done.
+
+> [!C] Highlighting a broken streak lowers later engagement. Some people keep training injured to protect a streak.
+
+- Across 7 studies, showing an intact streak increased later engagement and showing a broken one decreased it. The effect was stronger when people blamed themselves, and weaker when the streak could be repaired (Silverman & Barasch 2023)
+- In interviews with 17 runners who ended streaks of 100+ days, some had run injured to keep the streak alive, and some felt a strong sense of loss afterwards (Ingalls 2026)
+
+Rest is part of the program, so this site has no daily streak. The calendar only marks days you trained and never shows a week as missed.
+
+> [!B] Rewards for showing up lower intrinsic motivation. Positive feedback about competence raises it.
+
+A meta-analysis of 128 experiments found that engagement- and completion-contingent rewards lowered free-choice intrinsic motivation (effect sizes −0.40 and −0.36), while positive feedback raised it (+0.33, Deci 1999). That is why there are no points or badges, and the records page compares you only with your own past.
+
 ## References
 
 1. Harkin B et al. 2016. Does monitoring goal progress promote goal attainment? *Psychol Bull*. [PMID 26479070](https://pubmed.ncbi.nlm.nih.gov/26479070/)
@@ -123,3 +147,9 @@ Meta-analysis (Halperin 2022). In experienced lifters, RPE correlates strongly w
 19. McEwan D et al. 2016. The effectiveness of multi-component goal setting interventions for changing physical activity behaviour. *Health Psychol Rev*. [PMID 26445201](https://pubmed.ncbi.nlm.nih.gov/26445201/)
 20. Halperin I et al. 2022. Accuracy in Predicting Repetitions to Task Failure in Resistance Exercise. *Sports Med*. [PMID 34542869](https://pubmed.ncbi.nlm.nih.gov/34542869/)
 21. Zourdos MC et al. 2016. Novel Resistance Training-Specific Rating of Perceived Exertion Scale Measuring Repetitions in Reserve. *J Strength Cond Res*. [PMID 26049792](https://pubmed.ncbi.nlm.nih.gov/26049792/)
+22. Mazeas A et al. 2022. Evaluating the Effectiveness of Gamification on Physical Activity: Systematic Review and Meta-analysis of Randomized Controlled Trials. *J Med Internet Res*. [PMID 34982715](https://pubmed.ncbi.nlm.nih.gov/34982715/)
+23. Milkman KL et al. 2021. Megastudies improve the impact of applied behavioural science. *Nature*. [PMID 34880497](https://pubmed.ncbi.nlm.nih.gov/34880497/)
+24. Weakley J et al. 2023. The Effect of Feedback on Resistance Training Performance and Adaptations: A Systematic Review and Meta-analysis. *Sports Med*. [PMID 37410360](https://pubmed.ncbi.nlm.nih.gov/37410360/)
+25. Silverman J, Barasch A. 2023. On or Off Track: How (Broken) Streaks Affect Consumer Decisions. *J Consum Res* 49(6):1095–1117. [doi:10.1093/jcr/ucac029](https://doi.org/10.1093/jcr/ucac029)
+26. Ingalls EE et al. 2026. The dark side of streaking: Examining the backfire potential of run streaking in recreational runners who broke a long-term streak. *PLoS One*. [PMID 42172224](https://pubmed.ncbi.nlm.nih.gov/42172224/)
+27. Deci EL, Koestner R, Ryan RM. 1999. A meta-analytic review of experiments examining the effects of extrinsic rewards on intrinsic motivation. *Psychol Bull*. [PMID 10589297](https://pubmed.ncbi.nlm.nih.gov/10589297/)

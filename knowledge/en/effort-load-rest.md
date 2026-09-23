@@ -49,7 +49,7 @@ High-rep sets are brutal, and it is harder to judge how far you are from failure
 1. Robinson ZP et al. 2024. Exploring the Dose-Response Relationship Between Estimated Resistance Training Proximity to Failure, Strength Gain, and Muscle Hypertrophy. *Sports Med*. [PMID 38970765](https://pubmed.ncbi.nlm.nih.gov/38970765/)
 2. Refalo MC et al. 2023. Influence of Resistance Training Proximity-to-Failure on Skeletal Muscle Hypertrophy. *Sports Med*. [PMID 36334240](https://pubmed.ncbi.nlm.nih.gov/36334240/)
 3. Refalo MC et al. 2024. Similar muscle hypertrophy following eight weeks of resistance training to momentary muscular failure or with repetitions-in-reserve in resistance-trained individuals. *J Sports Sci*. [PMID 38393985](https://pubmed.ncbi.nlm.nih.gov/38393985/)
-4. Refalo MC et al. 2025. Effect of Proximity-To-Failure on Perceptual Responses. *Eur J Sport Sci*. [PMID 39960821](https://pubmed.ncbi.nlm.nih.gov/39960821/)
+4. Refalo MC et al. 2025. The Effect of Proximity-To-Failure on Perceptual Responses to Resistance Training. *Eur J Sport Sci*. [PMID 39960821](https://pubmed.ncbi.nlm.nih.gov/39960821/)
 5. Halperin I et al. 2022. Accuracy in Predicting Repetitions to Task Failure in Resistance Exercise. *Sports Med*. [PMID 34542869](https://pubmed.ncbi.nlm.nih.gov/34542869/)
 6. Schoenfeld BJ et al. 2017b. Strength and Hypertrophy Adaptations Between Low- vs. High-Load Resistance Training. *J Strength Cond Res*. [PMID 28834797](https://pubmed.ncbi.nlm.nih.gov/28834797/)
 7. Lopez P et al. 2021. Resistance Training Load Effects on Muscle Hypertrophy and Strength Gain. *Med Sci Sports Exerc*. [PMID 33433148](https://pubmed.ncbi.nlm.nih.gov/33433148/)

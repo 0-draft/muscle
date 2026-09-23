@@ -46,7 +46,7 @@ last_reviewed: 2026-09-23
 
 1. Watson NF et al. 2015. Recommended Amount of Sleep for a Healthy Adult. *J Clin Sleep Med*. [PMID 25979105](https://pubmed.ncbi.nlm.nih.gov/25979105/)
 2. Lamon S et al. 2021. The effect of acute sleep deprivation on skeletal muscle protein synthesis and the hormonal environment. *Physiol Rep*. [PMID 33400856](https://pubmed.ncbi.nlm.nih.gov/33400856/)
-3. Saner NJ et al. 2020. Exercise mitigates sleep-loss-induced changes in glucose tolerance, mitochondrial function, sarcoplasmic protein synthesis, and diurnal rhythms. *J Physiol*. [PMID 32078168](https://pubmed.ncbi.nlm.nih.gov/32078168/)
+3. Saner NJ et al. 2020. The effect of sleep restriction, with or without high-intensity interval exercise, on myofibrillar protein synthesis in healthy young men. *J Physiol*. [PMID 32078168](https://pubmed.ncbi.nlm.nih.gov/32078168/)
 4. Knowles OE et al. 2018. Inadequate sleep and muscle strength: Implications for resistance training. *J Sci Med Sport*. [PMID 29422383](https://pubmed.ncbi.nlm.nih.gov/29422383/)
 5. Parr EB et al. 2014. Alcohol ingestion impairs maximal post-exercise rates of myofibrillar protein synthesis following a single bout of concurrent training. *PLoS One*. [PMID 24533082](https://pubmed.ncbi.nlm.nih.gov/24533082/)
 6. Henselmans M et al. 2022. The Effect of Carbohydrate Intake on Strength and Resistance Training Performance: A Systematic Review. *Nutrients*. [PMID 35215506](https://pubmed.ncbi.nlm.nih.gov/35215506/)

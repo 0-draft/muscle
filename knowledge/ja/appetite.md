@@ -66,7 +66,7 @@ last_reviewed: 2026-09-23
 
 > [!C] 食事の回数を増やしても、食欲そのものは増えない。ただし食べる機会が増えるので、摂取量は増えやすい。
 
-- 回数を増やすと食欲のピークは下がったが、1日の食欲の合計は変わらなかった（Leidy 2011）
+- 食事回数の比較試験をまとめたレビューでは、1日3回より増やしても食欲の抑制への効果はほとんどなかった（Leidy 2011）
 - 回数が多い方が食欲は高かった（Perrigue 2016）
 - 観察研究のメタ分析では、食べる回数が多い人は1日約125 kcal 多く摂っていた（Wang 2016）
 
@@ -111,9 +111,9 @@ last_reviewed: 2026-09-23
 16. Westerterp-Plantenga MS et al. 2009. Dietary protein, weight loss, and weight maintenance. *Annu Rev Nutr*. [PMID 19400750](https://pubmed.ncbi.nlm.nih.gov/19400750/)
 17. Westerterp-Plantenga MS et al. 2012. Dietary protein – its role in satiety, energetics, weight loss and health. *Br J Nutr*. [PMID 23107521](https://pubmed.ncbi.nlm.nih.gov/23107521/)
 18. Paddon-Jones D et al. 2008. Protein, weight management, and satiety. *Am J Clin Nutr*. [PMID 18469287](https://pubmed.ncbi.nlm.nih.gov/18469287/)
-19. Leidy HJ et al. 2011. The influence of higher protein intake and greater eating frequency on appetite control in overweight and obese men. *J Nutr*. [PMID 21123467](https://pubmed.ncbi.nlm.nih.gov/21123467/)
+19. Leidy HJ et al. 2011. The effect of eating frequency on appetite control and food intake: brief synopsis of controlled feeding studies. *J Nutr*. [PMID 21123467](https://pubmed.ncbi.nlm.nih.gov/21123467/)
 20. Perrigue MM et al. 2016. Higher Eating Frequency Does Not Decrease Appetite in Healthy Adults. *J Nutr*. [PMID 26561409](https://pubmed.ncbi.nlm.nih.gov/26561409/)
-21. Wang YQ et al. 2016. The Association between Eating Frequency and Obesity Risk: A Meta-Analysis. *Int J Environ Res Public Health*. [PMID 27322302](https://pubmed.ncbi.nlm.nih.gov/27322302/)
+21. Wang YQ et al. 2016. Increased Eating Frequency Is Associated with Lower Obesity Risk, But Higher Energy Intake in Adults: A Meta-Analysis. *Int J Environ Res Public Health*. [PMID 27322302](https://pubmed.ncbi.nlm.nih.gov/27322302/)
 22. Schubert MM et al. 2013. Acute exercise and subsequent energy intake. A meta-analysis. *Appetite*. [PMID 23274127](https://pubmed.ncbi.nlm.nih.gov/23274127/)
 23. Dorling J et al. 2018. Acute and Chronic Effects of Exercise on Appetite, Energy Intake, and Appetite-Related Hormones. *Nutrients*. [PMID 30131457](https://pubmed.ncbi.nlm.nih.gov/30131457/)
 24. Goltz FR et al. 2018. Interindividual Responses of Appetite to Acute Exercise. *Med Sci Sports Exerc*. [PMID 29240652](https://pubmed.ncbi.nlm.nih.gov/29240652/)
