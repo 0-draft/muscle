@@ -56,7 +56,7 @@ The real reason for twice a week is that doing 20 sets in one day hurts the qual
 
 > [!B] With volume equated, body-part splits and full-body training produce the same hypertrophy and strength.
 
-Meta-analysis of 14 studies and 392 people (Ramos-Campo 2024). The current "chest/shoulders ×2, back/arms ×2" split trains each muscle twice a week, so it is fine as is.
+Meta-analysis of 14 studies and 392 people (Ramos-Campo 2024). If you can only train twice a week, training the whole body each session (the whole upper body in the current program) still hits every muscle twice a week.
 
 ## References
 

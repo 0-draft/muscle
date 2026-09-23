@@ -11,9 +11,11 @@ Hypertrophy research notes with every claim graded by the strength of its eviden
 
 | When | What | How |
 | --- | --- | --- |
-| After each session | Log sets | Append to `log/training/YYYY-MM.txt` (GitHub mobile works) |
-| Every morning | Log body weight | Append to `log/body.csv` |
-| Weekly | Review | Claude Code: `/weekly-review` |
+| During a session | Follow the workout, tick sets, rest timer | Program page on your phone (add it to the home screen) |
+| After each session | Log sets | "Log this session" on the program page → Submit the issue |
+| Every morning | Log body weight | "Log weight" on the program page → Submit the issue |
+| Monday 07:00 JST | Numbers for last week | Automatic `[review]` issue |
+| Weekly | Written review with advice | Claude Code: `/weekly-review` |
 | Every 12 weeks or on stalls | Adjust the program | `/update-program` |
 | Monthly or on a question | Research a topic | `/research <topic>` |
 
