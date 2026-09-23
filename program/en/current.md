@@ -34,34 +34,9 @@ For the first 2 weeks, don't train to failure, and don't do drop sets or slow ec
 
 If your urine turns cola-colored, or your arms swell badly and hurt, get medical care right away.
 
-## Day A
+## Exercises
 
-| Exercise | Sets | Reps | RIR | Rest |
-| --- | --- | --- | --- | --- |
-| Bench press | 3 | 6–10 | 1–2 | 2–3 min |
-| Chest-supported row | 3 | 8–12 | 1–2 | 2 min |
-| Lat pulldown | 3 | 8–12 | 1–2 | 2 min |
-| Cable fly (full chest stretch) | 2 | 12–15 | 0–1 | 90 sec |
-| Cable lateral raise | 3 | 12–20 | 0–1 | 90 sec |
-| Incline dumbbell curl | 2 | 10–15 | 0–1 | 90 sec |
-| Overhead cable extension | 2 | 10–15 | 0–1 | 90 sec |
-
-18 sets total, 60–70 minutes.
-
-## Day B
-
-| Exercise | Sets | Reps | RIR | Rest |
-| --- | --- | --- | --- | --- |
-| Incline dumbbell press | 3 | 8–12 | 1–2 | 2–3 min |
-| Pull-up (assisted or lat pulldown if you can't) | 3 | 6–10 | 1–2 | 2–3 min |
-| Seated cable row | 3 | 8–12 | 1–2 | 2 min |
-| Machine chest press (or dips) | 2 | 8–12 | 1–2 | 2 min |
-| Dumbbell lateral raise | 3 | 12–20 | 0–1 | 90 sec |
-| Reverse pec deck | 2 | 12–20 | 0–1 | 90 sec |
-| Bayesian cable curl | 2 | 10–15 | 0–1 | 90 sec |
-| Overhead dumbbell extension | 2 | 10–15 | 0–1 | 90 sec |
-
-20 sets total, 65–75 minutes. When short on time, drop one set each from the reverse pec deck and the arm exercises.
+Exercises, sets, reps and rest times are on the workout screen at the top of this page. The source is `program/plan.json`. Day A is about 18 sets and 60–70 minutes; Day B is about 20 sets and 65–75 minutes. Short on time, drop one set each of reverse pec deck and the arm exercises on Day B.
 
 ## Weekly sets (weeks 3–8)
 

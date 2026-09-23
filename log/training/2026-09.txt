@@ -1,0 +1,1 @@
+# Training log for 2026-09. Format: log/README.md

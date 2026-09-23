@@ -1,6 +1,7 @@
 ---
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Workout from '../components/Workout.astro';
 import { t, type Lang } from '../lib/i18n';
 import { isoDate, programFor } from '../lib/content';
 
@@ -8,16 +9,23 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t[lang];
 const current = await programFor(lang);
-const { Content } = await render(current);
+const { Content, headings } = await render(current);
 const date = isoDate(current.data.valid_from);
+const toc = headings.filter((h) => h.depth === 2);
 ---
 <Base lang={lang} title={current.data.title} description={current.data.summary}>
-  <article class="doc">
+  <article class="doc doc-program">
     <header class="doc-head">
       <h1>{current.data.title}</h1>
       <p class="lede">{current.data.summary}</p>
       <p class="doc-meta">{lang === 'en' ? <span>{s.validFrom} <time datetime={date}>{date}</time></span> : <span><time datetime={date}>{date}</time> {s.validFrom}</span>}</p>
     </header>
-    <div class="prose"><Content /></div>
+    <Workout lang={lang} />
+    <div class="doc-body">
+      <div class="prose"><Content /></div>
+      <nav class="toc" aria-label={s.toc}>
+        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+      </nav>
+    </div>
   </article>
 </Base>

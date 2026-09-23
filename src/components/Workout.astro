@@ -1,0 +1,331 @@
+---
+// In-gym workout screen. Server-renders both days for the build phase; the script picks the
+// current week and phase, tracks completed sets, runs the rest timer, keeps the screen on, and
+// turns what you typed into log lines for log/training/YYYY-MM.txt.
+import { days, exerciseName, fmtRest, plan, setsFor, type DayId } from '../lib/plan';
+import { t, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t[lang].workout;
+const build = plan.phases.find((p) => p.id === 'build')!;
+const dayIds = Object.keys(days) as DayId[];
+const phaseInfo = plan.phases.map((p) => ({ id: p.id, weeks: p.weeks, label: p.label[lang], note: p.note[lang], rir: p.rir }));
+const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
+---
+<section class="workout" data-workout data-start={plan.start} data-weeks={plan.weeks} data-phases={JSON.stringify(phaseInfo)} data-lang={lang}>
+  <div class="wk-controls">
+    <div class="wk-weeks" role="group" aria-label={s.week}>
+      {Array.from({ length: plan.weeks }, (_, i) => {
+        const w = i + 1;
+        const phase = plan.phases.find((p) => p.weeks.includes(w))!;
+        return <button type="button" class="wk-week" data-week={w} data-phase={phase.id} aria-pressed="false">{w}</button>;
+      })}
+    </div>
+    <p class="wk-phase"><strong data-phase-label>{build.label[lang]}</strong> <span data-phase-note>{build.note[lang]}</span></p>
+    <div class="wk-days" role="group" aria-label={s.day}>
+      {dayIds.map((d, i) => <button type="button" class="wk-day" data-day={d} aria-pressed={i === 0 ? 'true' : 'false'}>{dayLabel(d)}</button>)}
+    </div>
+  </div>
+
+  <div class="wk-progress" aria-live="polite">
+    <svg class="wk-bar" viewBox="0 0 320 64" aria-hidden="true">
+      <rect class="bar-steel" x="4" y="29" width="312" height="6" rx="2" />
+      <rect class="bar-collar" x="92" y="22" width="8" height="20" rx="1" />
+      <rect class="bar-collar" x="220" y="22" width="8" height="20" rx="1" />
+      <g data-plates-left></g>
+      <g data-plates-right></g>
+    </svg>
+    <span class="wk-count" data-count></span>
+  </div>
+
+  {dayIds.map((d, di) => (
+    <ol class="wk-list" data-day-list={d} hidden={di !== 0}>
+      {days[d].map((ex, i) => {
+        const setsByPhase = Object.fromEntries(plan.phases.map((p) => [p.id, setsFor(ex, p)]));
+        const n = setsFor(ex, build);
+        return (
+          <li class="wk-card" data-ex={ex.id} data-type={ex.type} data-rest={ex.rest} data-sets={JSON.stringify(setsByPhase)} data-order={i}>
+            <h3 class="wk-name">{exerciseName(ex.id, lang)}</h3>
+            <p class="wk-spec">
+              <span data-sets-n>{n}</span> {s.sets} × {ex.reps}
+              <span class="wk-dot" aria-hidden="true"></span> RIR <span data-rir>{build.rir[ex.type]}</span>
+              <span class="wk-dot" aria-hidden="true"></span> {s.rest} {fmtRest(ex.rest)}
+            </p>
+            {ex.note && <p class="wk-note">{ex.note[lang]}</p>}
+            <div class="wk-sets" role="group" aria-label={exerciseName(ex.id, lang)} data-set-buttons>
+              {Array.from({ length: Math.max(...Object.values(setsByPhase)) }, (_, k) => (
+                <button type="button" class="wk-set" data-set={k + 1} aria-pressed="false" aria-label={s.setN(k + 1)} hidden={k >= n}>{k + 1}</button>
+              ))}
+            </div>
+            <label class="wk-log">
+              <span>{s.logLabel}</span>
+              <input type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-log placeholder={s.logPlaceholder} />
+            </label>
+            <p class="wk-last" data-last hidden></p>
+          </li>
+        );
+      })}
+    </ol>
+  ))}
+
+  <div class="wk-actions">
+    <button type="button" class="wk-btn wk-btn-primary" data-copy>{s.copy}</button>
+    <a class="wk-btn" data-open-log href="https://github.com/0-draft/muscle/tree/main/log/training" target="_blank" rel="noopener">{s.openLog}</a>
+    <label class="wk-toggle"><input type="checkbox" data-wake /> <span>{s.wake}</span></label>
+    <button type="button" class="wk-btn wk-btn-quiet" data-reset>{s.reset}</button>
+  </div>
+  <p class="wk-finished" data-finished hidden>{s.finished}</p>
+
+  <div class="wk-timer" data-timer hidden>
+    <span class="wk-timer-label">{s.restTimer}</span>
+    <span class="wk-timer-time" data-timer-time role="timer" aria-live="off">0:00</span>
+    <button type="button" class="wk-btn" data-timer-add>{s.add30}</button>
+    <button type="button" class="wk-btn" data-timer-skip>{s.skip}</button>
+  </div>
+</section>
+
+<script>
+  import { t } from '../lib/i18n';
+
+  type PhaseInfo = { id: string; weeks: number[]; label: string; note: string; rir: Record<string, string> };
+  const COLORS = ['a', 'b', 'c', 'd'];
+  const store = {
+    get<T>(k: string, fallback: T): T {
+      try {
+        const v = localStorage.getItem(`muscle:${k}`);
+        return v === null ? fallback : (JSON.parse(v) as T);
+      } catch {
+        return fallback;
+      }
+    },
+    set(k: string, v: unknown) {
+      try {
+        localStorage.setItem(`muscle:${k}`, JSON.stringify(v));
+      } catch {}
+    },
+  };
+  const isoToday = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+  const fmt = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.max(0, sec) % 60).padStart(2, '0')}`;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-workout]')) {
+    const lang = root.dataset.lang as 'en' | 'ja';
+    const s = t[lang].workout;
+    const phases = JSON.parse(root.dataset.phases!) as PhaseInfo[];
+    const weeks = Number(root.dataset.weeks);
+    const start = new Date(`${root.dataset.start}T00:00:00`);
+    const elapsed = Math.floor((Date.now() - start.getTime()) / 86400000);
+    const autoWeek = Math.min(weeks, Math.max(1, Math.floor(elapsed / 7) + 1));
+
+    let week = store.get('week', autoWeek);
+    if (store.get('weekSetOn', '') !== isoToday()) week = autoWeek; // manual pick lasts for the day
+    let day = store.get<string>('day', store.get<string>('lastDay', 'B') === 'A' ? 'B' : 'A');
+    const sessionKey = () => `session:${isoToday()}:${day}`;
+    let done: Record<string, number[]> = {};
+    let logs: Record<string, string> = {};
+
+    const phase = () => phases.find((p) => p.weeks.includes(week)) ?? phases[phases.length - 1];
+    const list = () => root.querySelector<HTMLElement>(`[data-day-list="${day}"]`)!;
+    const cards = () => [...list().querySelectorAll<HTMLElement>('.wk-card')];
+    const setsOf = (card: HTMLElement) => (JSON.parse(card.dataset.sets!) as Record<string, number>)[phase().id];
+
+    function loadSession() {
+      const saved = store.get<{ done: Record<string, number[]>; logs: Record<string, string> }>(sessionKey(), { done: {}, logs: {} });
+      done = saved.done;
+      logs = saved.logs;
+    }
+    const saveSession = () => store.set(sessionKey(), { done, logs });
+
+    function renderBar() {
+      const all = cards().flatMap((c, ci) =>
+        Array.from({ length: setsOf(c) }, (_, k) => ({ ex: c.dataset.ex!, set: k + 1, color: COLORS[ci % COLORS.length], type: c.dataset.type })),
+      );
+      const loaded = all.filter((p) => done[p.ex]?.includes(p.set));
+      const left = root.querySelector('[data-plates-left]')!;
+      const right = root.querySelector('[data-plates-right]')!;
+      const step = Math.min(8, 86 / Math.max(all.length, 1));
+      const mk = (x: number, p: (typeof loaded)[number], i: number) => {
+        const h = p.type === 'compound' ? 54 : 40;
+        return `<rect class="wk-plate" data-c="${p.color}" style="--i:${i}" x="${x}" y="${32 - h / 2}" width="${step * 0.82}" height="${h}" rx="1.5"/>`;
+      };
+      left.innerHTML = loaded.map((p, i) => mk(92 - (i + 1) * step, p, i)).join('');
+      right.innerHTML = loaded.map((p, i) => mk(228 + i * step + step * 0.18, p, i)).join('');
+      root.querySelector('[data-count]')!.textContent = s.done(loaded.length, all.length);
+      const finished = all.length > 0 && loaded.length === all.length;
+      root.querySelector<HTMLElement>('[data-finished]')!.hidden = !finished;
+      if (finished) store.set('lastDay', day);
+    }
+
+    function render() {
+      const p = phase();
+      root.querySelectorAll<HTMLButtonElement>('.wk-week').forEach((b) => {
+        b.setAttribute('aria-pressed', String(Number(b.dataset.week) === week));
+        b.classList.toggle('is-now', Number(b.dataset.week) === autoWeek);
+      });
+      root.querySelector('[data-phase-label]')!.textContent = p.label;
+      root.querySelector('[data-phase-note]')!.textContent = p.note;
+      root.querySelectorAll<HTMLButtonElement>('.wk-day').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.day === day)));
+      root.querySelectorAll<HTMLElement>('[data-day-list]').forEach((l) => (l.hidden = l.dataset.dayList !== day));
+      const lastLogs = store.get<Record<string, string>>('lastLogs', {});
+      for (const card of cards()) {
+        const n = setsOf(card);
+        const ex = card.dataset.ex!;
+        card.querySelector('[data-sets-n]')!.textContent = String(n);
+        card.querySelector('[data-rir]')!.textContent = p.rir[card.dataset.type!];
+        card.querySelectorAll<HTMLButtonElement>('.wk-set').forEach((b) => {
+          const k = Number(b.dataset.set);
+          b.hidden = k > n;
+          b.setAttribute('aria-pressed', String(done[ex]?.includes(k) ?? false));
+        });
+        const input = card.querySelector<HTMLInputElement>('[data-log]')!;
+        input.value = logs[ex] ?? '';
+        const last = card.querySelector<HTMLElement>('[data-last]')!;
+        last.hidden = !lastLogs[ex];
+        last.textContent = lastLogs[ex] ? `${s.last}: ${lastLogs[ex]}` : '';
+        card.classList.toggle('is-done', (done[ex]?.length ?? 0) >= n);
+      }
+      renderBar();
+    }
+
+    // ---- rest timer ----
+    const timer = root.querySelector<HTMLElement>('[data-timer]')!;
+    const timeEl = root.querySelector<HTMLElement>('[data-timer-time]')!;
+    let endsAt = 0;
+    let tick = 0;
+    let audio: AudioContext | null = null;
+    const beep = () => {
+      try {
+        audio ??= new AudioContext();
+        const o = audio.createOscillator();
+        const g = audio.createGain();
+        o.frequency.value = 880;
+        g.gain.setValueAtTime(0.2, audio.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.4);
+        o.connect(g).connect(audio.destination);
+        o.start();
+        o.stop(audio.currentTime + 0.4);
+      } catch {}
+      navigator.vibrate?.([200, 100, 200]);
+    };
+    const stopTimer = () => {
+      clearInterval(tick);
+      timer.hidden = true;
+    };
+    const update = () => {
+      const left = Math.round((endsAt - Date.now()) / 1000);
+      timeEl.textContent = fmt(left);
+      if (left <= 0) {
+        beep();
+        stopTimer();
+      }
+    };
+    const startTimer = (sec: number) => {
+      endsAt = Date.now() + sec * 1000;
+      timer.hidden = false;
+      clearInterval(tick);
+      update();
+      tick = window.setInterval(update, 250);
+      try {
+        audio ??= new AudioContext(); // unlock audio inside the tap gesture
+      } catch {}
+    };
+    root.querySelector('[data-timer-add]')!.addEventListener('click', () => {
+      endsAt += 30000;
+      update();
+    });
+    root.querySelector('[data-timer-skip]')!.addEventListener('click', stopTimer);
+
+    // ---- wake lock ----
+    let lock: WakeLockSentinel | null = null;
+    const wake = root.querySelector<HTMLInputElement>('[data-wake]')!;
+    const wakeLabel = wake.closest('label')!;
+    if (!('wakeLock' in navigator)) wakeLabel.hidden = true;
+    const requestLock = async () => {
+      try {
+        lock = await navigator.wakeLock.request('screen');
+      } catch {
+        wake.checked = false;
+      }
+    };
+    wake.addEventListener('change', async () => {
+      if (wake.checked) await requestLock();
+      else await lock?.release();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && wake.checked) requestLock();
+    });
+
+    // ---- events ----
+    root.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const wk = target.closest<HTMLButtonElement>('.wk-week');
+      if (wk) {
+        week = Number(wk.dataset.week);
+        store.set('week', week);
+        store.set('weekSetOn', isoToday());
+        return render();
+      }
+      const dy = target.closest<HTMLButtonElement>('.wk-day');
+      if (dy) {
+        day = dy.dataset.day!;
+        store.set('day', day);
+        loadSession();
+        return render();
+      }
+      const set = target.closest<HTMLButtonElement>('.wk-set');
+      if (set) {
+        const card = set.closest<HTMLElement>('.wk-card')!;
+        const ex = card.dataset.ex!;
+        const k = Number(set.dataset.set);
+        const cur = new Set(done[ex] ?? []);
+        if (cur.has(k)) cur.delete(k);
+        else {
+          cur.add(k);
+          startTimer(Number(card.dataset.rest));
+        }
+        done[ex] = [...cur].sort((a, b) => a - b);
+        saveSession();
+        return render();
+      }
+    });
+    root.addEventListener('input', (e) => {
+      const input = (e.target as HTMLElement).closest<HTMLInputElement>('[data-log]');
+      if (!input) return;
+      logs[input.closest<HTMLElement>('.wk-card')!.dataset.ex!] = input.value.trim();
+      saveSession();
+    });
+    root.querySelector('[data-reset]')!.addEventListener('click', () => {
+      done = {};
+      logs = {};
+      saveSession();
+      stopTimer();
+      render();
+    });
+
+    const copyBtn = root.querySelector<HTMLButtonElement>('[data-copy]')!;
+    copyBtn.addEventListener('click', async () => {
+      const lines = cards()
+        .map((c) => [c.dataset.ex!, logs[c.dataset.ex!]] as const)
+        .filter(([, v]) => v);
+      const text = [`${isoToday()} ${day}`, ...lines.map(([id, v]) => `${id} ${v}`)].join('\n') + '\n';
+      const lastLogs = store.get<Record<string, string>>('lastLogs', {});
+      for (const [id, v] of lines) lastLogs[id] = v!;
+      store.set('lastLogs', lastLogs);
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = s.copied;
+        setTimeout(() => (copyBtn.textContent = s.copy), 1600);
+      } catch {
+        window.prompt(s.copy, text);
+      }
+    });
+    const month = isoToday().slice(0, 7);
+    root.querySelector<HTMLAnchorElement>('[data-open-log]')!.href = `https://github.com/0-draft/muscle/edit/main/log/training/${month}.txt`;
+
+    loadSession();
+    render();
+  }
+</script>

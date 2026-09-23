@@ -1,43 +1,73 @@
 ---
-// The whole knowledge base loaded onto one bar: every graded claim is a plate,
-// heaviest (A) inside, lightest (D) outside, mirrored on both sleeves.
-import { GRADES, type Counts, countsLabel, totalKg } from '../lib/grades';
+// The whole knowledge base loaded onto one bar. Every graded claim is a plate (heaviest inside),
+// mirrored on both sleeves. Each left-sleeve plate links to its claim; hovering shows the claim.
+import { GRADES, PLATE_H, type Claim, type Counts, countsLabel, totalKg } from '../lib/grades';
 import { t, type Lang } from '../lib/i18n';
-interface Props { counts: Counts; lang: Lang }
-const { counts, lang } = Astro.props;
+
+type Loaded = Claim & { href: string; topic: string };
+interface Props { claims: Loaded[]; counts: Counts; lang: Lang }
+const { claims, counts, lang } = Astro.props;
 const s = t[lang];
-const all = GRADES.flatMap((g) => Array.from({ length: counts[g.id] }, () => g));
-const plateH = { A: 150, B: 128, C: 106, D: 84 } as const;
-// Fixed sleeve length; plates get thinner as the evidence base grows so every claim stays on the bar.
-const sleeve = 320, collar = 14, shaft = 300;
-const step = Math.min(19, sleeve / Math.max(all.length, 1));
-const pw = step * 0.82, gap = step - pw;
+const order = GRADES.map((g) => g.id);
+const plates = [...claims].sort((a, b) => order.indexOf(a.grade) - order.indexOf(b.grade));
+const label = Object.fromEntries(GRADES.map((g) => [g.id, g.label[lang]]));
+
+const H = 190, cy = H / 2, maxPlate = 168;
+const sleeve = 330, collar = 14, shaft = 300;
+const step = Math.min(19, sleeve / Math.max(plates.length, 1));
+const pw = step * 0.84, gap = step - pw, rx = Math.min(3, pw / 3);
 const W = 2 * (sleeve + collar) + shaft + 40;
-const H = 170, cy = H / 2;
 const leftCollarX = 20 + sleeve;
 const rightCollarX = leftCollarX + collar + shaft;
 ---
-<figure class="barbell">
+<figure class="barbell" data-barbell>
   <div class="barbell-scroll">
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="bar-cap">
       <rect class="bar-steel" x="8" y={cy - 5} width={W - 16} height="10" rx="3" />
       <rect class="bar-knurl" x={leftCollarX + collar + 40} y={cy - 5} width={shaft - 80} height="10" />
-      <rect class="bar-collar" x={leftCollarX} y={cy - 14} width={collar} height="28" rx="2" />
-      <rect class="bar-collar" x={rightCollarX} y={cy - 14} width={collar} height="28" rx="2" />
-      {all.map((g, i) => {
-        const h = plateH[g.id];
-        const lx = leftCollarX - (i + 1) * (pw + gap);
-        const rx = rightCollarX + collar + gap + i * (pw + gap);
+      <rect class="bar-collar" x={leftCollarX} y={cy - 15} width={collar} height="30" rx="2" />
+      <rect class="bar-collar" x={rightCollarX} y={cy - 15} width={collar} height="30" rx="2" />
+      {plates.map((c, i) => {
+        const h = maxPlate * PLATE_H[c.grade];
+        const lx = leftCollarX - (i + 1) * step;
+        const rxPos = rightCollarX + collar + gap + i * step;
         return (
-          <g class="plate-pair" data-grade={g.id} style={`--i:${i}`}>
-            <rect x={lx} y={cy - h / 2} width={pw} height={h} rx={Math.min(3, pw / 3)} />
-            <rect x={rx} y={cy - h / 2} width={pw} height={h} rx={Math.min(3, pw / 3)} />
+          <g class="plate-pair" data-grade={c.grade} style={`--i:${i}`}>
+            <a href={c.href} tabindex="-1" data-tip-grade={c.grade} data-tip-label={label[c.grade]} data-tip-topic={c.topic} data-tip-text={c.text}>
+              <rect x={lx} y={cy - h / 2} width={pw} height={h} rx={rx} />
+            </a>
+            <rect x={rxPos} y={cy - h / 2} width={pw} height={h} rx={rx} aria-hidden="true" />
           </g>
         );
       })}
     </svg>
   </div>
-  <figcaption id="bar-cap">
-    {s.barCaption(all.length, countsLabel(counts), totalKg(counts))}
-  </figcaption>
+  <div class="bar-tip" role="status" aria-live="polite" hidden></div>
+  <figcaption id="bar-cap">{s.barCaption(plates.length, countsLabel(counts), totalKg(counts))}</figcaption>
 </figure>
+
+<script>
+  // Hover or tap-and-hold a plate to read its claim; click goes to it.
+  for (const fig of document.querySelectorAll<HTMLElement>('[data-barbell]')) {
+    const tip = fig.querySelector<HTMLElement>('.bar-tip')!;
+    const show = (a: Element, x: number) => {
+      const d = (a as HTMLElement).dataset;
+      tip.dataset.grade = d.tipGrade;
+      tip.innerHTML = '';
+      const head = document.createElement('p');
+      head.className = 'bar-tip-head';
+      head.textContent = `${d.tipGrade} · ${d.tipLabel} · ${d.tipTopic}`;
+      const body = document.createElement('p');
+      body.textContent = d.tipText ?? '';
+      tip.append(head, body);
+      tip.hidden = false;
+      const box = fig.getBoundingClientRect();
+      tip.style.left = `${Math.max(8, Math.min(x - box.left - 160, box.width - 328))}px`;
+    };
+    fig.addEventListener('pointerover', (e) => {
+      const a = (e.target as Element).closest('a[data-tip-text]');
+      if (a) show(a, (e as PointerEvent).clientX);
+    });
+    fig.addEventListener('pointerleave', () => (tip.hidden = true));
+  }
+</script>

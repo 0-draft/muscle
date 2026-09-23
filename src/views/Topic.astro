@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import GradeStack from '../components/GradeStack.astro';
+import Plate from '../components/Plate.astro';
+import { GRADES } from '../lib/grades';
 import { href, t, type Lang } from '../lib/i18n';
 import { isoDate, knowledgeFor } from '../lib/content';
 
@@ -8,10 +10,11 @@ interface Props { lang: Lang; slug: string }
 const { lang, slug } = Astro.props;
 const s = t[lang];
 const row = (await knowledgeFor(lang)).find((r) => r.slug === slug)!;
-const { entry, counts } = row;
+const { entry, counts, claims } = row;
 const { Content, headings } = row.rendered;
 const toc = headings.filter((h) => h.depth === 2);
 const date = isoDate(entry.data.last_reviewed);
+const label = Object.fromEntries(GRADES.map((g) => [g.id, g.label[lang]]));
 ---
 <Base lang={lang} title={entry.data.title} description={entry.data.summary}>
   <article class="doc">
@@ -19,13 +22,31 @@ const date = isoDate(entry.data.last_reviewed);
       <a class="back" href={href(lang)}>{s.back}</a>
       <h1>{entry.data.title}</h1>
       <p class="lede">{entry.data.summary}</p>
-      <p class="doc-meta"><GradeStack counts={counts} label={s.breakdown} /><span>{s.lastReviewed} <time datetime={date}>{date}</time></span></p>
+      <p class="doc-meta"><GradeStack counts={counts} label={s.breakdown} /><span>{s.lastReviewed} <time datetime={date}>{date}</time></span><a href={href(lang, 'grades/')}>{s.nav.grades}</a></p>
     </header>
-    {toc.length > 2 && (
-      <nav class="toc" aria-label={s.toc}>
-        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
-      </nav>
+    {claims.length > 0 && (
+      <details class="sof" open>
+        <summary>{s.claimsTitle}<span class="sof-n">{claims.length}</span></summary>
+        <ol>
+          {claims.map((c) => (
+            <li data-grade={c.grade}>
+              <a href={`#${c.id}`}>
+                <Plate grade={c.grade} size={0.6} />
+                <span class="sof-grade"><span class="sof-letter">{c.grade}</span>{label[c.grade]}</span>
+                <span class="sof-text">{c.text}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </details>
     )}
-    <div class="prose"><Content /></div>
+    <div class="doc-body">
+      <div class="prose"><Content /></div>
+      {toc.length > 2 && (
+        <nav class="toc" aria-label={s.toc}>
+          <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </nav>
+      )}
+    </div>
   </article>
 </Base>

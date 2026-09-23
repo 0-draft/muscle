@@ -1,5 +1,5 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { addCounts, emptyCounts, type Counts } from './grades';
+import { addCounts, emptyCounts, type Claim, type Counts } from './grades';
 import type { Lang } from './i18n';
 
 /** Entry ids look like `en/protein`; the slug is the part after the language. */
@@ -13,7 +13,8 @@ export async function knowledgeFor(lang: Lang) {
     entries.map(async (entry) => {
       const rendered = await render(entry);
       const counts = addCounts(emptyCounts(), rendered.remarkPluginFrontmatter.claimCounts as Counts);
-      return { entry, rendered, counts, slug: slugOf(entry.id) };
+      const claims = (rendered.remarkPluginFrontmatter.claims ?? []) as Claim[];
+      return { entry, rendered, counts, claims, slug: slugOf(entry.id) };
     }),
   );
 }

@@ -1,15 +1,20 @@
 import type { Lang } from './i18n';
+import { LABELS } from './remark-claims.mjs';
 
 export type Grade = 'A' | 'B' | 'C' | 'D';
 export type Counts = Record<Grade, number>;
+export type Claim = { id: string; grade: Grade; text: string };
 
-// Plate weights mirror IWF bumper colours: red 25, blue 20, yellow 15, green 10.
+// IWF bumper plates: red 25, blue 20, yellow 15, white 5. White instead of green 10 for D,
+// because red and green collapse into one colour under deuteranopia.
 export const GRADES: { id: Grade; kg: number; label: Record<Lang, string>; meaning: Record<Lang, string> }[] = [
-  { id: 'A', kg: 25, label: { en: 'Strong', ja: '強い' }, meaning: { en: 'Several meta-analyses or systematic reviews agree', ja: '複数のメタ分析・系統的レビューで結論が一致' } },
-  { id: 'B', kg: 20, label: { en: 'Moderate', ja: 'まずまず' }, meaning: { en: 'One meta-analysis, or several RCTs', ja: 'メタ分析1本、または複数のRCTで支持' } },
-  { id: 'C', kg: 15, label: { en: 'Limited', ja: '弱い' }, meaning: { en: 'A few RCTs or observational studies only', ja: '少数のRCTや観察研究のみ' } },
-  { id: 'D', kg: 10, label: { en: 'Inference', ja: '推論' }, meaning: { en: 'Expert opinion or reasoning from mechanisms', ja: '専門家の意見・メカニズムからの推測' } },
+  { id: 'A', kg: 25, label: { en: LABELS.en.A, ja: LABELS.ja.A }, meaning: { en: 'Several meta-analyses or systematic reviews agree', ja: '複数のメタ分析・系統的レビューで結論が一致' } },
+  { id: 'B', kg: 20, label: { en: LABELS.en.B, ja: LABELS.ja.B }, meaning: { en: 'One meta-analysis, or several RCTs', ja: 'メタ分析1本、または複数のRCTで支持' } },
+  { id: 'C', kg: 15, label: { en: LABELS.en.C, ja: LABELS.ja.C }, meaning: { en: 'A few RCTs or observational studies only', ja: '少数のRCTや観察研究のみ' } },
+  { id: 'D', kg: 5, label: { en: LABELS.en.D, ja: LABELS.ja.D }, meaning: { en: 'Expert opinion or reasoning from mechanisms', ja: '専門家の意見・メカニズムからの推測' } },
 ];
+
+export const PLATE_H: Record<Grade, number> = { A: 1, B: 0.86, C: 0.72, D: 0.56 };
 
 export const emptyCounts = (): Counts => ({ A: 0, B: 0, C: 0, D: 0 });
 

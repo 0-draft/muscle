@@ -1,0 +1,33 @@
+{
+  "$comment": "Single source for the workout screen. Exercise ids and names come from data/exercises.json. Rationale lives in program/{ja,en}/current.md.",
+  "start": "2026-09-23",
+  "weeks": 12,
+  "rampSets": 2,
+  "phases": [
+    { "id": "ramp1", "weeks": [1], "ramp": true, "rir": { "compound": "3–4", "isolation": "3–4" }, "label": { "en": "Ramp-in", "ja": "慣らし" }, "note": { "en": "2 sets each. No failure, drop sets or slow negatives.", "ja": "各2セット。限界まで追い込まない。ドロップセットとゆっくり下ろすネガティブもなし。" } },
+    { "id": "ramp2", "weeks": [2], "ramp": true, "rir": { "compound": "2–3", "isolation": "2–3" }, "label": { "en": "Ramp-in", "ja": "慣らし" }, "note": { "en": "Still 2 sets each, a little closer to failure.", "ja": "まだ各2セット。少しだけ限界に近づける。" } },
+    { "id": "build", "weeks": [3, 4, 5, 6, 7, 8], "rir": { "compound": "1–2", "isolation": "0–1" }, "label": { "en": "Build", "ja": "本番" }, "note": { "en": "Full sets. Add weight once every set hits the top of the rep range.", "ja": "全セット。全セットでレップ範囲の上限に届いたら重量を上げる。" } },
+    { "id": "push", "weeks": [9, 10, 11, 12], "extra": true, "rir": { "compound": "1–2", "isolation": "0–1" }, "label": { "en": "Push", "ja": "伸ばす" }, "note": { "en": "If you're still progressing, +1 set on lateral raises and arms.", "ja": "伸びが続いていれば、サイドレイズと腕に+1セット。" } }
+  ],
+  "days": {
+    "A": [
+      { "id": "bench", "sets": 3, "reps": "6–10", "type": "compound", "rest": 150 },
+      { "id": "cs_row", "sets": 3, "reps": "8–12", "type": "compound", "rest": 120 },
+      { "id": "pulldown", "sets": 3, "reps": "8–12", "type": "compound", "rest": 120 },
+      { "id": "cable_fly", "sets": 2, "reps": "12–15", "type": "isolation", "rest": 90, "note": { "en": "Let the chest open fully at the bottom.", "ja": "下で胸を開き切る。" } },
+      { "id": "cable_lateral", "sets": 3, "reps": "12–20", "type": "isolation", "rest": 90, "extra": 1 },
+      { "id": "incline_curl", "sets": 2, "reps": "10–15", "type": "isolation", "rest": 90, "extra": 1 },
+      { "id": "oh_cable_ext", "sets": 2, "reps": "10–15", "type": "isolation", "rest": 90, "extra": 1 }
+    ],
+    "B": [
+      { "id": "incline_db", "sets": 3, "reps": "8–12", "type": "compound", "rest": 150 },
+      { "id": "pullup", "sets": 3, "reps": "6–10", "type": "compound", "rest": 150, "note": { "en": "Use the assisted machine or lat pulldown if you can't get 6.", "ja": "6回できなければアシスト付きかラットプルダウンで。" } },
+      { "id": "cable_row", "sets": 3, "reps": "8–12", "type": "compound", "rest": 120 },
+      { "id": "chest_press", "sets": 2, "reps": "8–12", "type": "compound", "rest": 120, "note": { "en": "Dips work too.", "ja": "ディップスでもいい。" } },
+      { "id": "db_lateral", "sets": 3, "reps": "12–20", "type": "isolation", "rest": 90, "extra": 1 },
+      { "id": "reverse_pec_deck", "sets": 2, "reps": "12–20", "type": "isolation", "rest": 90 },
+      { "id": "bayesian_curl", "sets": 2, "reps": "10–15", "type": "isolation", "rest": 90, "extra": 1 },
+      { "id": "oh_db_ext", "sets": 2, "reps": "10–15", "type": "isolation", "rest": 90, "extra": 1 }
+    ]
+  }
+}
