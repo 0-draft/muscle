@@ -1,0 +1,202 @@
+/* Chalked steel + rubber floor. Colour is reserved for evidence plates (IWF bumper colours). */
+:root {
+  --bg: #eceef1;
+  --surface: #f8f9fb;
+  --ink: #18202e;
+  --muted: #586172;
+  --rule: #cbd1d9;
+  --steel: #8a929e;
+  --steel-dark: #5e6776;
+  --link: #1d4e9e;
+  --plate-a: #c62a2f;
+  --plate-b: #1d4e9e;
+  --plate-c: #d9a40b;
+  --plate-d: #2f7d4f;
+  --font-display: 'Dela Gothic One', 'Hiragino Kaku Gothic StdN', 'Yu Gothic', sans-serif;
+  --font-body: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+  --measure: 40rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171b;
+    --surface: #1d2026;
+    --ink: #e4e7ec;
+    --muted: #9aa2ae;
+    --rule: #30353e;
+    --steel: #7d8591;
+    --steel-dark: #a3abb7;
+    --link: #8fb0ea;
+    --plate-a: #e0474b;
+    --plate-b: #4a7bd0;
+    --plate-c: #e8b92a;
+    --plate-d: #43a36a;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  font-feature-settings: 'palt' 0;
+  padding-inline: max(1rem, env(safe-area-inset-left));
+}
+a { color: var(--link); text-underline-offset: 0.2em; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--plate-b); outline-offset: 2px; border-radius: 2px; }
+img, svg { max-width: 100%; }
+
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 1rem; top: 1rem; background: var(--surface); padding: 0.5rem 1rem; z-index: 10; }
+
+/* header / footer */
+.site-head, main, .site-foot { max-width: 68rem; margin-inline: auto; }
+.site-head {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.75rem 2rem; padding-block: 1.25rem; border-bottom: 1px solid var(--rule);
+}
+.brand { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--font-display); font-size: 1.05rem; color: var(--ink); text-decoration: none; }
+.brand-plate { fill: var(--plate-a); }
+.site-head nav { display: flex; gap: 1.5rem; }
+.site-head nav a { color: var(--muted); text-decoration: none; font-weight: 500; padding-block: 0.25rem; border-bottom: 3px solid transparent; }
+.site-head nav a:hover { color: var(--ink); }
+.site-head nav a[aria-current='page'] { color: var(--ink); border-bottom-color: var(--ink); }
+.site-head nav { flex-wrap: wrap; align-items: center; }
+.site-head nav a.lang { border: 1px solid var(--rule); border-radius: 999px; padding: 0.1rem 0.8rem; font-size: 0.875rem; }
+.site-head nav a.lang:hover { border-color: var(--ink); }
+.site-foot { padding-block: 3rem 4rem; margin-top: 5rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.875rem; }
+.site-foot p { margin: 0.25rem 0; max-width: var(--measure); }
+
+/* hero */
+.hero { padding-block: clamp(2.5rem, 7vw, 5.5rem) 2rem; }
+.hero h1 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.1rem, 6.4vw, 4.6rem); line-height: 1.22; letter-spacing: 0.01em;
+  margin: 0 0 1.5rem;
+}
+.lede { color: var(--muted); max-width: var(--measure); margin: 0 0 1rem; }
+
+/* barbell */
+.barbell { margin: 2.5rem 0 0; }
+.barbell-scroll { overflow-x: auto; }
+.barbell svg { display: block; width: 100%; min-width: 34rem; height: auto; }
+.bar-steel { fill: var(--steel); }
+.bar-knurl { fill: var(--steel-dark); opacity: 0.35; }
+.bar-collar { fill: var(--steel-dark); }
+.plate-pair[data-grade='A'] rect { fill: var(--plate-a); }
+.plate-pair[data-grade='B'] rect { fill: var(--plate-b); }
+.plate-pair[data-grade='C'] rect { fill: var(--plate-c); }
+.plate-pair[data-grade='D'] rect { fill: var(--plate-d); }
+.barbell figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.9rem; }
+.barbell figcaption strong { color: var(--ink); font-family: var(--font-display); font-weight: 400; font-size: 1.1rem; }
+
+/* The one orchestrated moment: plates slide onto the sleeves on first load. */
+@media (prefers-reduced-motion: no-preference) {
+  .plate-pair rect { animation: load 520ms cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 18ms + 150ms); }
+  .plate-pair rect:first-child { --from: -60px; }
+  .plate-pair rect:last-child { --from: 60px; }
+  @keyframes load { from { transform: translateX(var(--from)); opacity: 0; } to { transform: none; opacity: 1; } }
+}
+
+/* plates as glyphs */
+.plate[data-grade='A'] rect { fill: var(--plate-a); }
+.plate[data-grade='B'] rect { fill: var(--plate-b); }
+.plate[data-grade='C'] rect { fill: var(--plate-c); }
+.plate[data-grade='D'] rect { fill: var(--plate-d); }
+.stack { display: inline-flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+
+/* topic index */
+.area { margin-top: 3.5rem; }
+.area h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.35rem; margin: 0 0 0.5rem; }
+.topics { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.topics li { border-bottom: 1px solid var(--rule); }
+.topics a {
+  display: grid; grid-template-columns: minmax(12rem, 1fr) 2fr auto; gap: 0.25rem 2rem; align-items: center;
+  padding: 1.1rem 0.25rem; color: inherit; text-decoration: none;
+}
+.topics a:hover .topic-title { text-decoration: underline; text-underline-offset: 0.2em; }
+.topic-title { font-weight: 700; font-size: 1.1rem; }
+.topic-summary { color: var(--muted); font-size: 0.95rem; line-height: 1.7; }
+.topic-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+.topic-meta time { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+@media (max-width: 52rem) {
+  .topics a { grid-template-columns: 1fr; }
+  .topic-meta { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+
+/* article */
+.doc { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); gap: 0 4rem; padding-top: 2.5rem; }
+.doc-head, .doc .legend { grid-column: 1 / -1; }
+.doc-head h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 4.5vw, 2.9rem); line-height: 1.3; margin: 0.5rem 0 1rem; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem; color: var(--muted); font-size: 0.875rem; margin: 0 0 2rem; }
+.back { font-size: 0.9rem; color: var(--muted); }
+.toc { grid-column: 2; grid-row: 2; align-self: start; position: sticky; top: 1.5rem; font-size: 0.9rem; border-left: 2px solid var(--rule); padding-left: 1rem; }
+.toc ol { margin: 0; padding-left: 1.2rem; color: var(--muted); }
+.toc a { color: var(--muted); text-decoration: none; }
+.toc a:hover { color: var(--ink); }
+.prose { grid-column: 1; grid-row: 2; min-width: 0; }
+.doc:not(:has(.toc)) .prose { grid-row: auto; }
+@media (max-width: 60rem) {
+  .doc { grid-template-columns: minmax(0, 1fr); }
+  .toc { position: static; grid-column: 1; grid-row: auto; margin-bottom: 2rem; }
+  .prose { grid-row: auto; }
+}
+
+.prose h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; line-height: 1.4; margin: 3.5rem 0 1rem; scroll-margin-top: 1rem; }
+.prose > h2:first-child { margin-top: 0; }
+/* Dela Gothic's kana clot at small sizes: Japanese keeps it for h1 only. */
+:lang(ja) :is(.prose h2, .area h2, .brand) { font-family: var(--font-body); font-weight: 700; letter-spacing: 0.02em; }
+.prose h3 { font-size: 1.12rem; margin: 2.25rem 0 0.5rem; }
+.prose p, .prose ul, .prose ol { margin: 0 0 1.1rem; }
+.prose li { margin-bottom: 0.3rem; }
+.prose strong { font-weight: 700; }
+.prose code { font-size: 0.9em; background: var(--surface); border: 1px solid var(--rule); border-radius: 3px; padding: 0.05em 0.35em; }
+.prose pre { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 1rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; }
+.prose pre code { border: 0; padding: 0; background: none; }
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 3rem 0; }
+
+/* tables scroll inside their own box */
+.prose table { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.9rem; line-height: 1.6; margin: 0 0 1.5rem; max-width: 100%; }
+.prose th, .prose td { text-align: left; padding: 0.5rem 0.9rem 0.5rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.prose th { border-bottom: 2px solid var(--ink); white-space: nowrap; }
+.prose td { font-variant-numeric: tabular-nums; }
+
+/* plain quotes vs graded claims */
+.prose blockquote { margin: 0 0 1.25rem; padding: 0.25rem 0 0.25rem 1rem; border-left: 3px solid var(--rule); color: var(--muted); }
+.prose blockquote.claim {
+  position: relative; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--rule); border-left: 0; border-radius: 0 4px 4px 0;
+  padding: 0.9rem 1.1rem 0.9rem 3.1rem; margin: 1.5rem 0;
+}
+.prose blockquote.claim::after {
+  content: attr(data-grade); position: absolute; left: 0.85rem; top: 0.7rem; width: 0.8rem;
+  font-family: var(--font-display); font-size: 0.75rem; line-height: 1; text-align: center; color: var(--g);
+}
+.prose blockquote.claim::before {
+  content: ''; position: absolute; left: 0.9rem; bottom: 0.75rem;
+  width: 0.7rem; border-radius: 3px; background: var(--g);
+  height: calc((100% - 2.4rem) * var(--f));
+}
+.prose blockquote.claim[data-grade='A'] { --g: var(--plate-a); --f: 1; }
+.prose blockquote.claim[data-grade='B'] { --g: var(--plate-b); --f: 0.85; }
+.prose blockquote.claim[data-grade='C'] { --g: var(--plate-c); --f: 0.7; }
+.prose blockquote.claim[data-grade='D'] { --g: var(--plate-d); --f: 0.55; }
+.prose blockquote.claim p:last-child { margin-bottom: 0; }
+
+/* references */
+.prose :is(h2#参考文献, h2#references) + ol { font-size: 0.85rem; line-height: 1.65; color: var(--muted); }
+.prose :is(h2#参考文献, h2#references) + ol a { word-break: break-all; }
+
+/* legend */
+.legend { margin: 0 0 2rem; display: grid; gap: 0; max-width: var(--measure); border-top: 2px solid var(--ink); }
+.legend-row { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; align-items: center; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); }
+.legend dt { display: flex; align-items: center; gap: 0.6rem; }
+.legend-id { font-family: var(--font-display); font-size: 1.3rem; }
+.legend-kg { color: var(--muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.legend dd { margin: 0; }
+.legend dd strong { margin-right: 0.75rem; }

@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import GradeLegend from '../components/GradeLegend.astro';
+import { t, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t[lang];
+---
+<Base lang={lang} title={s.nav.grades}>
+  <article class="doc">
+    <header class="doc-head">
+      <h1>{s.gradesTitle}</h1>
+      <p class="lede">{s.gradesLede}</p>
+    </header>
+    <GradeLegend lang={lang} />
+    <div class="prose">
+      <h2>{s.gradesRulesTitle}</h2>
+      <ul>{s.gradesRules.map((r) => <li>{r}</li>)}</ul>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+import { asset } from '../lib/grades';
+import { href, switchPath, t, type Lang } from '../lib/i18n';
+interface Props { lang: Lang; title?: string; description?: string }
+const { lang, title, description } = Astro.props;
+const s = t[lang];
+const other: Lang = lang === 'en' ? 'ja' : 'en';
+const fullTitle = title ? `${title} | ${s.siteName}` : s.siteName;
+const path = Astro.url.pathname;
+const home = href(lang);
+const nav = [
+  { href: home, label: s.nav.knowledge, match: path === home || path.startsWith(href(lang, 'k/')) },
+  { href: href(lang, 'program/'), label: s.nav.program, match: path.startsWith(href(lang, 'program/')) },
+  { href: href(lang, 'grades/'), label: s.nav.grades, match: path.startsWith(href(lang, 'grades/')) },
+];
+const alt = switchPath(path, other);
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description ?? s.description} />
+    <link rel="alternate" hreflang={other} href={alt} />
+    <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <a class="skip" href="#main">{s.skip}</a>
+    <header class="site-head">
+      <a class="brand" href={home}>
+        <svg width="28" height="18" viewBox="0 0 28 18" aria-hidden="true"><rect x="0" y="8" width="28" height="2" rx="1" fill="currentColor"/><rect x="4" y="1" width="4" height="16" rx="1" class="brand-plate"/><rect x="20" y="1" width="4" height="16" rx="1" class="brand-plate"/></svg>
+        {s.siteName}
+      </a>
+      <nav aria-label="Main">
+        {nav.map((n) => <a href={n.href} aria-current={n.match ? 'page' : undefined}>{n.label}</a>)}
+        <a class="lang" href={alt} hreflang={other} lang={other}>{s.langName}</a>
+      </nav>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-foot">
+      <p>{s.footer}</p>
+      <p><a href="https://github.com/0-draft/muscle">{s.source}</a></p>
+    </footer>
+  </body>
+</html>

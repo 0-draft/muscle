@@ -1,0 +1,15 @@
+---
+import Plate from './Plate.astro';
+import { GRADES } from '../lib/grades';
+import type { Lang } from '../lib/i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<dl class="legend">
+  {GRADES.map((g) => (
+    <div class="legend-row">
+      <dt><Plate grade={g.id} /><span class="legend-id">{g.id}</span><span class="legend-kg">{g.kg} kg</span></dt>
+      <dd><strong>{g.label[lang]}</strong>{g.meaning[lang]}</dd>
+    </div>
+  ))}
+</dl>

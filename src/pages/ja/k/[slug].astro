@@ -1,0 +1,11 @@
+---
+import { getCollection } from 'astro:content';
+import Topic from '../../../views/Topic.astro';
+import { slugOf } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('knowledge', (e) => e.id.startsWith('ja/'));
+  return entries.map((e) => ({ params: { slug: slugOf(e.id) } }));
+}
+---
+<Topic lang="ja" slug={Astro.params.slug} />

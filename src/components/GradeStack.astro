@@ -1,0 +1,12 @@
+---
+// Compact plate stack for list rows: one glyph per claim, heaviest first.
+import Plate from './Plate.astro';
+import { GRADES, type Counts, countsLabel } from '../lib/grades';
+interface Props { counts: Counts; label: string }
+const { counts, label } = Astro.props;
+const plates = GRADES.flatMap((g) => Array.from({ length: counts[g.id] }, () => g.id));
+const detail = countsLabel(counts);
+---
+<span class="stack" role="img" aria-label={`${label}: ${detail}`} title={detail}>
+  {plates.map((id) => <Plate grade={id} size={0.55} />)}
+</span>

@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import Barbell from '../components/Barbell.astro';
+import GradeStack from '../components/GradeStack.astro';
+import { addCounts, emptyCounts } from '../lib/grades';
+import { href, t, type Lang } from '../lib/i18n';
+import { isoDate, knowledgeFor } from '../lib/content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t[lang];
+const AREAS = ['training', 'nutrition', 'recovery', 'adherence'] as const;
+const rows = await knowledgeFor(lang);
+const total = rows.reduce((acc, r) => addCounts(acc, r.counts), emptyCounts());
+---
+<Base lang={lang}>
+  <section class="hero">
+    <h1>{s.heroTitle[0]}<br />{s.heroTitle[1]}</h1>
+    <p class="lede">{s.heroLede}</p>
+    <Barbell counts={total} lang={lang} />
+  </section>
+
+  {AREAS.map((area) => {
+    const list = rows.filter((r) => r.entry.data.area === area);
+    if (list.length === 0) return null;
+    return (
+      <section class="area" aria-labelledby={`area-${area}`}>
+        <h2 id={`area-${area}`}>{s.areas[area]}</h2>
+        <ul class="topics">
+          {list.map(({ entry, counts, slug }) => (
+            <li>
+              <a href={href(lang, `k/${slug}/`)}>
+                <span class="topic-title">{entry.data.title}</span>
+                <span class="topic-summary">{entry.data.summary}</span>
+                <span class="topic-meta">
+                  <GradeStack counts={counts} label={s.breakdown} />
+                  <time datetime={isoDate(entry.data.last_reviewed)}>{isoDate(entry.data.last_reviewed)} {s.reviewed}</time>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  })}
+</Base>

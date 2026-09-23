@@ -1,0 +1,43 @@
+---
+// The whole knowledge base loaded onto one bar: every graded claim is a plate,
+// heaviest (A) inside, lightest (D) outside, mirrored on both sleeves.
+import { GRADES, type Counts, countsLabel, totalKg } from '../lib/grades';
+import { t, type Lang } from '../lib/i18n';
+interface Props { counts: Counts; lang: Lang }
+const { counts, lang } = Astro.props;
+const s = t[lang];
+const all = GRADES.flatMap((g) => Array.from({ length: counts[g.id] }, () => g));
+const plateH = { A: 150, B: 128, C: 106, D: 84 } as const;
+// Fixed sleeve length; plates get thinner as the evidence base grows so every claim stays on the bar.
+const sleeve = 320, collar = 14, shaft = 300;
+const step = Math.min(19, sleeve / Math.max(all.length, 1));
+const pw = step * 0.82, gap = step - pw;
+const W = 2 * (sleeve + collar) + shaft + 40;
+const H = 170, cy = H / 2;
+const leftCollarX = 20 + sleeve;
+const rightCollarX = leftCollarX + collar + shaft;
+---
+<figure class="barbell">
+  <div class="barbell-scroll">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="bar-cap">
+      <rect class="bar-steel" x="8" y={cy - 5} width={W - 16} height="10" rx="3" />
+      <rect class="bar-knurl" x={leftCollarX + collar + 40} y={cy - 5} width={shaft - 80} height="10" />
+      <rect class="bar-collar" x={leftCollarX} y={cy - 14} width={collar} height="28" rx="2" />
+      <rect class="bar-collar" x={rightCollarX} y={cy - 14} width={collar} height="28" rx="2" />
+      {all.map((g, i) => {
+        const h = plateH[g.id];
+        const lx = leftCollarX - (i + 1) * (pw + gap);
+        const rx = rightCollarX + collar + gap + i * (pw + gap);
+        return (
+          <g class="plate-pair" data-grade={g.id} style={`--i:${i}`}>
+            <rect x={lx} y={cy - h / 2} width={pw} height={h} rx={Math.min(3, pw / 3)} />
+            <rect x={rx} y={cy - h / 2} width={pw} height={h} rx={Math.min(3, pw / 3)} />
+          </g>
+        );
+      })}
+    </svg>
+  </div>
+  <figcaption id="bar-cap">
+    {s.barCaption(all.length, countsLabel(counts), totalKg(counts))}
+  </figcaption>
+</figure>
