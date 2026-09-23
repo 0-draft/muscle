@@ -7,28 +7,29 @@ An evidence-graded notebook on building muscle, a training program built from it
 ## What's here
 
 - **Knowledge**: 12 topics (volume, effort, range of motion, protein, eating with a small appetite, restarting after a layoff, habits, and more). Every claim carries an evidence grade, and every source has a PubMed ID that CI checks.
-- **Program**: a 12-week, 2-day-a-week upper-body restart program. On a phone it becomes a workout screen: tick sets, rest timer, keep-screen-on, one-tap logging.
+- **Program**: a 12-week, 2-day-a-week upper-body restart program. On a phone it becomes an attempt board: last session's numbers prefilled, ± steppers, plate math and warm-ups, a rest clock, a "good lift" verdict on every personal record, and one-tap logging.
+- **Records**: rebuilt after every logged session: a records board, sets per muscle on a body map, e1RM by session, training days and body-weight trend.
 - **Log**: training sessions and body weight, stored as plain text in this repo and summarized every Monday.
 
 ## Evidence grades
 
-Each claim is shown as a bumper plate. Heavier plate, stronger evidence. The letter and plate height carry the grade too, so it never depends on colour alone.
+Each claim is judged like a lift on the platform: three referee lights, white for a good lift, red for no lift. The number of white lights is the grade, and red lights carry a slash, so it never depends on colour alone. Plate colours are kept for what they mean in a gym: load.
 
-| Grade | Plate | Meaning |
+| Grade | Lights | Meaning |
 | --- | --- | --- |
-| A | Red, 25 kg | Several meta-analyses or systematic reviews agree |
-| B | Blue, 20 kg | One meta-analysis, or several RCTs |
-| C | Yellow, 15 kg | A few RCTs or observational studies only |
-| D | White, 5 kg | Expert opinion or reasoning from mechanisms |
+| A | ⚪⚪⚪ | Several meta-analyses or systematic reviews agree |
+| B | ⚪⚪🔴 | One meta-analysis, or several RCTs |
+| C | ⚪🔴🔴 | A few RCTs or observational studies only |
+| D | 🔴🔴🔴 | Expert opinion or reasoning from mechanisms |
 
-Evidence from untrained people only is graded one step lower when applied to trained lifters.
+Evidence from untrained people only loses one white light when applied to trained lifters.
 
 ## Using it
 
 | When | Do this | Where |
 | --- | --- | --- |
-| At the gym | Follow today's cards, tap each set when done, rest until the timer beeps | Program page on your phone (add it to the home screen) |
-| After the session | Type what you lifted, tap **Log this session**, then **Submit** on GitHub | Program page |
+| At the gym | Adjust the load on the attempt board, press **Done**, rest until the clock beeps | Program page on your phone (add it to the home screen) |
+| After the session | Tap **Log this session**, then **Submit** on GitHub (every finished set is already in it) | Program page |
 | Every morning | Enter your weight, tap **Log weight**, then **Submit** | Program page |
 | Every 4 weeks | Add your waist to the morning weigh-in | Program page |
 | Monday morning | Read the weekly numbers and merge the written review | GitHub notifications |

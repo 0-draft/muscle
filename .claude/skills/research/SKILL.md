@@ -46,7 +46,7 @@ last_reviewed: <YYYY-MM-DD today>
 1. Author AB et al. YYYY. Title. *Journal*. [PMID nnnnnnnn](https://pubmed.ncbi.nlm.nih.gov/nnnnnnnn/)
 ```
 
-- A claim block is a blockquote starting with `[!A]`..`[!D]`. The site turns these into plates.
+- A claim block is a blockquote starting with `[!A]`..`[!D]`. The site turns these into three referee lights (A = three white … D = three red).
 - Reference lines must keep the `N. Surname Initials ... YYYY. ... [PMID n]` shape; `scripts/verify-refs.mjs` parses it.
 - Papers without a PMID use `[doi:...](https://doi.org/...)`.
 
