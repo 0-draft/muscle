@@ -2,7 +2,7 @@
 // In-gym workout screen. Server-renders both days for the build phase; the script picks the
 // current week and phase, tracks completed sets, runs the rest timer, keeps the screen on, and
 // turns what you typed into log lines for log/training/YYYY-MM.txt.
-import { days, exerciseName, fmtRest, plan, setsFor, type DayId } from '../lib/plan';
+import { REPO, days, exerciseName, fmtRest, plan, setsFor, type DayId } from '../lib/plan';
 import { t, type Lang } from '../lib/i18n';
 
 interface Props { lang: Lang }
@@ -13,7 +13,7 @@ const dayIds = Object.keys(days) as DayId[];
 const phaseInfo = plan.phases.map((p) => ({ id: p.id, weeks: p.weeks, label: p.label[lang], note: p.note[lang], rir: p.rir }));
 const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
 ---
-<section class="workout" data-workout data-start={plan.start} data-weeks={plan.weeks} data-phases={JSON.stringify(phaseInfo)} data-lang={lang}>
+<section class="workout" data-workout data-repo={REPO} data-start={plan.start} data-weeks={plan.weeks} data-phases={JSON.stringify(phaseInfo)} data-lang={lang}>
   <div class="wk-controls">
     <div class="wk-weeks" role="group" aria-label={s.week}>
       {Array.from({ length: plan.weeks }, (_, i) => {
@@ -70,11 +70,12 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
   ))}
 
   <div class="wk-actions">
-    <button type="button" class="wk-btn wk-btn-primary" data-copy>{s.copy}</button>
-    <a class="wk-btn" data-open-log href="https://github.com/0-draft/muscle/tree/main/log/training" target="_blank" rel="noopener">{s.openLog}</a>
+    <a class="wk-btn wk-btn-primary" data-log-it href={`https://github.com/${REPO}/issues/new`} target="_blank" rel="noopener">{s.logIt}</a>
+    <button type="button" class="wk-btn" data-copy>{s.copy}</button>
     <label class="wk-toggle"><input type="checkbox" data-wake /> <span>{s.wake}</span></label>
     <button type="button" class="wk-btn wk-btn-quiet" data-reset>{s.reset}</button>
   </div>
+  <p class="wk-hint" data-log-hint>{s.logHint}</p>
   <p class="wk-finished" data-finished hidden>{s.finished}</p>
 
   <div class="wk-timer" data-timer hidden>
@@ -305,15 +306,36 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
       render();
     });
 
+    const sessionLines = () =>
+      cards()
+        .map((c) => [c.dataset.ex!, logs[c.dataset.ex!]] as const)
+        .filter(([, v]) => v)
+        .map(([id, v]) => `${id} ${v}`);
+    const remember = () => {
+      const lastLogs = store.get<Record<string, string>>('lastLogs', {});
+      for (const line of sessionLines()) {
+        const [id, ...rest] = line.split(' ');
+        lastLogs[id] = rest.join(' ');
+      }
+      store.set('lastLogs', lastLogs);
+    };
+    const hint = root.querySelector<HTMLElement>('[data-log-hint]')!;
+    root.querySelector<HTMLAnchorElement>('[data-log-it]')!.addEventListener('click', (e) => {
+      const lines = sessionLines();
+      if (!lines.length) {
+        e.preventDefault();
+        hint.textContent = s.nothing;
+        return;
+      }
+      const a = e.currentTarget as HTMLAnchorElement;
+      a.href = `https://github.com/${root.dataset.repo}/issues/new?${new URLSearchParams({ title: `[log] ${isoToday()} ${day}`, body: lines.join('\n') })}`;
+      remember();
+      store.set('lastDay', day);
+    });
     const copyBtn = root.querySelector<HTMLButtonElement>('[data-copy]')!;
     copyBtn.addEventListener('click', async () => {
-      const lines = cards()
-        .map((c) => [c.dataset.ex!, logs[c.dataset.ex!]] as const)
-        .filter(([, v]) => v);
-      const text = [`${isoToday()} ${day}`, ...lines.map(([id, v]) => `${id} ${v}`)].join('\n') + '\n';
-      const lastLogs = store.get<Record<string, string>>('lastLogs', {});
-      for (const [id, v] of lines) lastLogs[id] = v!;
-      store.set('lastLogs', lastLogs);
+      const text = [`${isoToday()} ${day}`, ...sessionLines()].join('\n') + '\n';
+      remember();
       try {
         await navigator.clipboard.writeText(text);
         copyBtn.textContent = s.copied;
@@ -322,8 +344,6 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
         window.prompt(s.copy, text);
       }
     });
-    const month = isoToday().slice(0, 7);
-    root.querySelector<HTMLAnchorElement>('[data-open-log]')!.href = `https://github.com/0-draft/muscle/edit/main/log/training/${month}.txt`;
 
     loadSession();
     render();

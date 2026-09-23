@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Workout from '../components/Workout.astro';
+import WeighIn from '../components/WeighIn.astro';
 import { t, type Lang } from '../lib/i18n';
 import { isoDate, programFor } from '../lib/content';
 
@@ -20,6 +21,7 @@ const toc = headings.filter((h) => h.depth === 2);
       <p class="lede">{current.data.summary}</p>
       <p class="doc-meta">{lang === 'en' ? <span>{s.validFrom} <time datetime={date}>{date}</time></span> : <span><time datetime={date}>{date}</time> {s.validFrom}</span>}</p>
     </header>
+    <WeighIn lang={lang} />
     <Workout lang={lang} />
     <div class="doc-body">
       <div class="prose"><Content /></div>

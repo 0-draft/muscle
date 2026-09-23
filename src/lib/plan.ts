@@ -15,6 +15,12 @@ export type PlanExercise = {
 };
 
 export { plan };
+
+export const REPO = '0-draft/muscle';
+
+/** Prefilled new-issue URL; .github/workflows/ingest.yml turns it into a log commit. */
+export const issueUrl = (title: string, body: string) =>
+  `https://github.com/${REPO}/issues/new?${new URLSearchParams({ title, body })}`;
 export const days = plan.days as Record<DayId, PlanExercise[]>;
 
 export const exerciseName = (id: string, lang: Lang) =>
