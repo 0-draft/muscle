@@ -2,7 +2,7 @@
 
 An evidence-graded notebook on building muscle, a training program built from it, and a training log that reviews itself every week.
 
-**Site: <https://0-draft.github.io/muscle/>** (English) · [日本語](https://0-draft.github.io/muscle/ja/)
+**Site: <https://0-draft.github.io/muscle/>** (English) · [日本語](https://0-draft.github.io/muscle/ja/) · [README（日本語）](README.ja.md)
 
 ## What's here
 
