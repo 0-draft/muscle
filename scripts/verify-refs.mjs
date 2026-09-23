@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// Checks every PubMed reference in knowledge/**: the PMID must exist, and the first author's
-// surname and the year in our reference line must match PubMed. Catches mistyped or invented PMIDs.
+// Checks every PubMed reference in knowledge/**: the PMID must exist, the first author's surname
+// and the year in our reference line must match PubMed, and the paper must not be retracted.
+// Catches mistyped or invented PMIDs and papers retracted after we cited them.
 // Usage: node scripts/verify-refs.mjs
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -41,6 +42,8 @@ for (const r of refs) {
     failures.push(`${r.where} PMID ${r.pmid} not found in PubMed`);
     continue;
   }
+  if ((s.pubtype ?? []).includes('Retracted Publication'))
+    failures.push(`${r.where} PMID ${r.pmid} has been RETRACTED: "${s.title}". Remove or replace the claims that rely on it.`);
   const surname = norm(s.sortfirstauthor ?? s.authors?.[0]?.name ?? '').split(' ')[0];
   // Epub-ahead-of-print can put the print year one later than the epub year.
   const years = [s.pubdate, s.epubdate].map((d) => (d ?? '').slice(0, 4)).filter(Boolean);

@@ -1,0 +1,37 @@
+name: Reference watch
+
+# Monthly: re-check every cited PMID against PubMed, including retractions that happen after we
+# cite a paper. Runs here because the cloud agents' network can't reach NCBI.
+on:
+  schedule:
+    - cron: '0 0 1 * *' # 1st of the month, 09:00 JST
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Verify references
+        id: verify
+        run: |
+          set +e
+          node scripts/verify-refs.mjs > refs.txt 2>&1
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat refs.txt
+      - name: Open an issue on problems
+        if: steps.verify.outputs.code != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          month=$(TZ=Asia/Tokyo date +%Y-%m)
+          { echo "The monthly reference check found problems. Fix the pages below; a retracted paper means the claims that rely on it need re-grading."; echo; echo '```text'; cat refs.txt; echo '```'; } > body.md
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "[refs] ${month}: reference check failed" --body-file body.md --assignee kanywst
