@@ -2,7 +2,7 @@
 // In-gym workout screen. Server-renders both days for the build phase; the script picks the
 // current week and phase, tracks completed sets, runs the rest timer, keeps the screen on, and
 // turns what you typed into log lines for log/training/YYYY-MM.txt.
-import { REPO, days, exerciseName, fmtRest, plan, setsFor, type DayId } from '../lib/plan';
+import { days, exerciseName, fmtRest, plan, setsFor, type DayId } from '../lib/plan';
 import { t, type Lang } from '../lib/i18n';
 
 interface Props { lang: Lang }
@@ -13,7 +13,7 @@ const dayIds = Object.keys(days) as DayId[];
 const phaseInfo = plan.phases.map((p) => ({ id: p.id, weeks: p.weeks, label: p.label[lang], note: p.note[lang], rir: p.rir }));
 const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
 ---
-<section class="workout" data-workout data-repo={REPO} data-start={plan.start} data-weeks={plan.weeks} data-phases={JSON.stringify(phaseInfo)} data-lang={lang}>
+<section class="workout" data-workout data-start={plan.start} data-weeks={plan.weeks} data-phases={JSON.stringify(phaseInfo)} data-lang={lang}>
   <div class="wk-controls">
     <div class="wk-weeks" role="group" aria-label={s.week}>
       {Array.from({ length: plan.weeks }, (_, i) => {
@@ -70,7 +70,7 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
   ))}
 
   <div class="wk-actions">
-    <a class="wk-btn wk-btn-primary" data-log-it href={`https://github.com/${REPO}/issues/new`} target="_blank" rel="noopener">{s.logIt}</a>
+    <button type="button" class="wk-btn wk-btn-primary" data-log-it>{s.logIt}</button>
     <button type="button" class="wk-btn" data-copy>{s.copy}</button>
     <label class="wk-toggle"><input type="checkbox" data-wake /> <span>{s.wake}</span></label>
     <button type="button" class="wk-btn wk-btn-quiet" data-reset>{s.reset}</button>
@@ -88,6 +88,8 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
 
 <script>
   import { t } from '../lib/i18n';
+  import { issueUrl, weekFor } from '../lib/plan';
+  import { normalizeLift } from '../../scripts/lib/log-format.mjs';
 
   type PhaseInfo = { id: string; weeks: number[]; label: string; note: string; rir: Record<string, string> };
   const COLORS = ['a', 'b', 'c', 'd'];
@@ -117,28 +119,42 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
     const s = t[lang].workout;
     const phases = JSON.parse(root.dataset.phases!) as PhaseInfo[];
     const weeks = Number(root.dataset.weeks);
-    const start = new Date(`${root.dataset.start}T00:00:00`);
-    const elapsed = Math.floor((Date.now() - start.getTime()) / 86400000);
-    const autoWeek = Math.min(weeks, Math.max(1, Math.floor(elapsed / 7) + 1));
+    type Saved = { done: Record<string, number[]>; logs: Record<string, string>; logged?: boolean };
+    const keyOf = (d: string, dy: string) => `session:${d}:${dy}`;
+    const hasData = (x: Saved) => Object.values(x.done ?? {}).some((a) => a.length) || Object.values(x.logs ?? {}).some(Boolean);
+    const nextDay = () => (store.get<string>('lastDay', 'B') === 'A' ? 'B' : 'A');
 
-    let week = store.get('week', autoWeek);
-    if (store.get('weekSetOn', '') !== isoToday()) week = autoWeek; // manual pick lasts for the day
-    let day = store.get<string>('day', store.get<string>('lastDay', 'B') === 'A' ? 'B' : 'A');
-    const sessionKey = () => `session:${isoToday()}:${day}`;
+    // A session belongs to the date it was started on, not to "today": a phone that sleeps past
+    // midnight must reopen the same session, and log it under the day it was trained.
+    let date = isoToday();
+    let day = 'A';
     let done: Record<string, number[]> = {};
     let logs: Record<string, string> = {};
+    let logged = false;
+    function open(d: string, dy: string) {
+      const saved = store.get<Saved>(keyOf(d, dy), { done: {}, logs: {} });
+      [date, day, done, logs, logged] = [d, dy, saved.done ?? {}, saved.logs ?? {}, saved.logged ?? false];
+      store.set('current', { date, day });
+    }
+    const saveSession = () => store.set(keyOf(date, day), { done, logs, logged });
+    /** Before the first edit of an empty session, move it to today. */
+    const touch = () => {
+      if (!hasData({ done, logs }) && date !== isoToday()) open(isoToday(), day);
+    };
+    {
+      const cur = store.get<{ date: string; day: string } | null>('current', null);
+      const saved = cur && store.get<Saved | null>(keyOf(cur.date, cur.day), null);
+      if (cur && saved && hasData(saved) && !saved.logged) open(cur.date, cur.day);
+      else open(isoToday(), nextDay());
+    }
+
+    const autoWeek = () => Math.min(weeks, Math.max(1, weekFor(new Date(`${date}T00:00:00`))));
+    let week = store.get('weekSetOn', '') === isoToday() ? store.get('week', autoWeek()) : autoWeek(); // manual pick lasts for the day
 
     const phase = () => phases.find((p) => p.weeks.includes(week)) ?? phases[phases.length - 1];
     const list = () => root.querySelector<HTMLElement>(`[data-day-list="${day}"]`)!;
     const cards = () => [...list().querySelectorAll<HTMLElement>('.wk-card')];
     const setsOf = (card: HTMLElement) => (JSON.parse(card.dataset.sets!) as Record<string, number>)[phase().id];
-
-    function loadSession() {
-      const saved = store.get<{ done: Record<string, number[]>; logs: Record<string, string> }>(sessionKey(), { done: {}, logs: {} });
-      done = saved.done;
-      logs = saved.logs;
-    }
-    const saveSession = () => store.set(sessionKey(), { done, logs });
 
     function renderBar() {
       const all = cards().flatMap((c, ci) =>
@@ -157,14 +173,13 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
       root.querySelector('[data-count]')!.textContent = s.done(loaded.length, all.length);
       const finished = all.length > 0 && loaded.length === all.length;
       root.querySelector<HTMLElement>('[data-finished]')!.hidden = !finished;
-      if (finished) store.set('lastDay', day);
     }
 
     function render() {
       const p = phase();
       root.querySelectorAll<HTMLButtonElement>('.wk-week').forEach((b) => {
         b.setAttribute('aria-pressed', String(Number(b.dataset.week) === week));
-        b.classList.toggle('is-now', Number(b.dataset.week) === autoWeek);
+        b.classList.toggle('is-now', Number(b.dataset.week) === autoWeek());
       });
       root.querySelector('[data-phase-label]')!.textContent = p.label;
       root.querySelector('[data-phase-note]')!.textContent = p.note;
@@ -271,13 +286,12 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
       }
       const dy = target.closest<HTMLButtonElement>('.wk-day');
       if (dy) {
-        day = dy.dataset.day!;
-        store.set('day', day);
-        loadSession();
+        open(hasData({ done, logs }) && !logged ? date : isoToday(), dy.dataset.day!);
         return render();
       }
       const set = target.closest<HTMLButtonElement>('.wk-set');
       if (set) {
+        touch();
         const card = set.closest<HTMLElement>('.wk-card')!;
         const ex = card.dataset.ex!;
         const k = Number(set.dataset.set);
@@ -295,10 +309,12 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
     root.addEventListener('input', (e) => {
       const input = (e.target as HTMLElement).closest<HTMLInputElement>('[data-log]');
       if (!input) return;
+      touch();
       logs[input.closest<HTMLElement>('.wk-card')!.dataset.ex!] = input.value.trim();
       saveSession();
     });
     root.querySelector('[data-reset]')!.addEventListener('click', () => {
+      if (hasData({ done, logs }) && !window.confirm(s.resetConfirm)) return;
       done = {};
       logs = {};
       saveSession();
@@ -308,34 +324,36 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
 
     const sessionLines = () =>
       cards()
-        .map((c) => [c.dataset.ex!, logs[c.dataset.ex!]] as const)
+        .map((c) => [c.dataset.ex!, normalizeLift(logs[c.dataset.ex!] ?? '')] as const)
         .filter(([, v]) => v)
         .map(([id, v]) => `${id} ${v}`);
-    const remember = () => {
+    /** Mark the session as sent: it stops being resumed and the next one alternates the day. */
+    const finish = () => {
       const lastLogs = store.get<Record<string, string>>('lastLogs', {});
       for (const line of sessionLines()) {
         const [id, ...rest] = line.split(' ');
         lastLogs[id] = rest.join(' ');
       }
       store.set('lastLogs', lastLogs);
+      store.set('lastDay', day);
+      logged = true;
+      saveSession();
     };
     const hint = root.querySelector<HTMLElement>('[data-log-hint]')!;
-    root.querySelector<HTMLAnchorElement>('[data-log-it]')!.addEventListener('click', (e) => {
+    root.querySelector('[data-log-it]')!.addEventListener('click', () => {
       const lines = sessionLines();
       if (!lines.length) {
-        e.preventDefault();
         hint.textContent = s.nothing;
         return;
       }
-      const a = e.currentTarget as HTMLAnchorElement;
-      a.href = `https://github.com/${root.dataset.repo}/issues/new?${new URLSearchParams({ title: `[log] ${isoToday()} ${day}`, body: lines.join('\n') })}`;
-      remember();
-      store.set('lastDay', day);
+      window.open(issueUrl(`[log] ${date} ${day}`, lines.join('\n')), '_blank', 'noopener');
+      finish();
+      hint.textContent = s.logHint;
     });
     const copyBtn = root.querySelector<HTMLButtonElement>('[data-copy]')!;
     copyBtn.addEventListener('click', async () => {
-      const text = [`${isoToday()} ${day}`, ...sessionLines()].join('\n') + '\n';
-      remember();
+      const text = [`${date} ${day}`, ...sessionLines()].join('\n') + '\n';
+      finish();
       try {
         await navigator.clipboard.writeText(text);
         copyBtn.textContent = s.copied;
@@ -345,7 +363,7 @@ const dayLabel = (d: DayId) => (lang === 'ja' ? `${d}日` : `Day ${d}`);
       }
     });
 
-    loadSession();
     render();
+
   }
 </script>

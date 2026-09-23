@@ -1,12 +1,11 @@
 ---
 // Morning weigh-in: two fields and one button that opens a prefilled "[weight]" issue.
-import { REPO } from '../lib/plan';
 import { t, type Lang } from '../lib/i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t[lang].weigh;
 ---
-<form class="weigh" data-weigh data-repo={REPO} data-lang={lang} novalidate>
+<form class="weigh" data-weigh data-lang={lang} novalidate>
   <h2 class="weigh-title">{s.title}</h2>
   <label><span>{s.weight}</span><input type="number" inputmode="decimal" step="0.1" min="30" max="250" name="weight" required /></label>
   <label><span>{s.waist}</span><input type="number" inputmode="decimal" step="0.5" min="40" max="200" name="waist" /></label>
@@ -16,6 +15,8 @@ const s = t[lang].weigh;
 
 <script>
   import { t } from '../lib/i18n';
+  import { issueUrl } from '../lib/plan';
+  import { parseBody } from '../../scripts/lib/log-format.mjs';
   for (const form of document.querySelectorAll<HTMLFormElement>('[data-weigh]')) {
     const s = t[form.dataset.lang as 'en' | 'ja'].weigh;
     const msg = form.querySelector<HTMLElement>('[data-weigh-msg]')!;
@@ -30,19 +31,21 @@ const s = t[lang].weigh;
     } catch {}
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const w = Number(weight.value);
-      if (!(w >= 30 && w <= 250)) {
+      // Same rule the ingest workflow applies, so a weigh-in is never rejected after the issue opens.
+      const body = waist.value.trim() ? `${weight.value.trim()}, ${waist.value.trim()}` : weight.value.trim();
+      const entry = parseBody(body);
+      if (!entry) {
         msg.textContent = s.invalid;
         weight.focus();
         return;
       }
+      const w = entry.weight;
       const d = new Date();
       const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      const body = waist.value ? `${w}, ${Number(waist.value)}` : String(w);
       try {
         localStorage.setItem('muscle:lastWeight', String(w));
       } catch {}
-      window.open(`https://github.com/${form.dataset.repo}/issues/new?${new URLSearchParams({ title: `[weight] ${date}`, body })}`, '_blank', 'noopener');
+      window.open(issueUrl(`[weight] ${date}`, body), '_blank', 'noopener');
       msg.textContent = `${s.last}: ${w} kg`;
     });
   }

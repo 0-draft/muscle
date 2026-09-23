@@ -22,7 +22,7 @@ const rightCollarX = leftCollarX + collar + shaft;
 ---
 <figure class="barbell" data-barbell>
   <div class="barbell-scroll">
-    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="bar-cap">
+    <svg viewBox={`0 0 ${W} ${H}`} role="group" aria-labelledby="bar-cap">
       <rect class="bar-steel" x="8" y={cy - 5} width={W - 16} height="10" rx="3" />
       <rect class="bar-knurl" x={leftCollarX + collar + 40} y={cy - 5} width={shaft - 80} height="10" />
       <rect class="bar-collar" x={leftCollarX} y={cy - 15} width={collar} height="30" rx="2" />
@@ -33,7 +33,7 @@ const rightCollarX = leftCollarX + collar + shaft;
         const rxPos = rightCollarX + collar + gap + i * step;
         return (
           <g class="plate-pair" data-grade={c.grade} style={`--i:${i}`}>
-            <a href={c.href} tabindex="-1" data-tip-grade={c.grade} data-tip-label={label[c.grade]} data-tip-topic={c.topic} data-tip-text={c.text}>
+            <a href={c.href} tabindex="-1" aria-label={`${c.grade} ${label[c.grade]}: ${c.text}`} data-tip-grade={c.grade} data-tip-label={label[c.grade]} data-tip-topic={c.topic} data-tip-text={c.text}>
               <rect x={lx} y={cy - h / 2} width={pw} height={h} rx={rx} />
             </a>
             <rect x={rxPos} y={cy - h / 2} width={pw} height={h} rx={rx} aria-hidden="true" />

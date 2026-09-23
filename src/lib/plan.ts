@@ -29,7 +29,6 @@ export const exerciseName = (id: string, lang: Lang) =>
 export const setsFor = (ex: PlanExercise, phase: Phase) =>
   'ramp' in phase && phase.ramp ? Math.min(plan.rampSets, ex.sets) : ex.sets + ('extra' in phase && phase.extra ? (ex.extra ?? 0) : 0);
 
-export const phaseForWeek = (week: number) => plan.phases.find((p) => p.weeks.includes(week)) ?? plan.phases.at(-1)!;
 
 /** 1-based program week for a date; 0 before the start, > plan.weeks after the end. */
 export const weekFor = (date: Date) => {

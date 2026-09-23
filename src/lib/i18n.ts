@@ -53,6 +53,7 @@ export const t = {
       add30: '+30s',
       wake: 'Keep screen on',
       reset: 'Reset this session',
+      resetConfirm: 'Clear every ticked set and log entry in this session?',
       logLabel: 'Log (load×reps@RIR)',
       logPlaceholder: 'e.g. 60x10 60x10 60x9@2',
       last: 'Last time',
@@ -69,7 +70,7 @@ export const t = {
       waist: 'Waist (cm, every 4 weeks)',
       logIt: 'Log weight',
       last: 'Last',
-      invalid: 'Enter a weight between 30 and 250 kg.',
+      invalid: 'Enter a weight of 30–250 kg (up to 2 decimals) and, if you measured it, a waist of 40–200 cm.',
     },
     gradesRules: [
       'Every source needs a PMID or DOI, and is checked against PubMed or the publisher before it goes in.',
@@ -115,6 +116,7 @@ export const t = {
       add30: '+30秒',
       wake: '画面を消さない',
       reset: 'このセッションをリセット',
+      resetConfirm: 'このセッションのチェックと記録を全部消す？',
       logLabel: '記録（重量×回数@RIR）',
       logPlaceholder: '例: 60x10 60x10 60x9@2',
       last: '前回',
@@ -131,7 +133,7 @@ export const t = {
       waist: 'ウエスト（cm、4週ごと）',
       logIt: '体重を記録する',
       last: '前回',
-      invalid: '30〜250kgの範囲で体重を入れる。',
+      invalid: '体重は30〜250kg（小数2桁まで）、ウエストを入れるなら40〜200cmで。',
     },
     gradesRules: [
       '出典にはPMIDかDOIを必ず付け、PubMedか出版社のページで実在を確認してから載せる。',

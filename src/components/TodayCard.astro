@@ -15,14 +15,13 @@ const phases = plan.phases.map((p) => ({ weeks: p.weeks, label: p.label[lang] })
 
 <script>
   import { t } from '../lib/i18n';
+  import { weekFor } from '../lib/plan';
   for (const el of document.querySelectorAll<HTMLAnchorElement>('[data-today]')) {
     const lang = (document.documentElement.lang === 'ja' ? 'ja' : 'en') as 'en' | 'ja';
     const s = t[lang].today;
-    const start = new Date(`${el.dataset.start}T00:00:00`);
     const weeks = Number(el.dataset.weeks);
     const phases = JSON.parse(el.dataset.phases!) as { weeks: number[]; label: string }[];
-    const days = Math.floor((Date.now() - start.getTime()) / 86400000);
-    const week = days < 0 ? 0 : Math.floor(days / 7) + 1;
+    const week = weekFor(new Date());
     let last: string | null = null;
     try {
       last = localStorage.getItem('muscle:lastDay');

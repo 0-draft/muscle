@@ -54,6 +54,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; }
 body {
   margin: 0;
@@ -162,7 +163,7 @@ button { font: inherit; color: inherit; }
   transition: transform 140ms ease;
 }
 .today:hover { transform: translateY(-2px); }
-.today-label { font-size: 0.8rem; font-weight: 700; color: var(--plate-a); }
+.today-label { font-size: 0.8rem; font-weight: 700; color: #a3122a; }
 .today-main { font-family: var(--font-display); font-size: 1.15rem; }
 .today-sub { font-size: 0.9rem; color: #535c6c; }
 
@@ -275,7 +276,7 @@ button { font: inherit; color: inherit; }
 .prose a.cite:hover { color: var(--link); text-decoration-style: solid; }
 .prose :is(h2#参考文献, h2#references) + ol { font-size: 0.85rem; line-height: 1.65; color: var(--muted); }
 .prose :is(h2#参考文献, h2#references) + ol a { word-break: break-all; }
-.prose a.backref { text-decoration: none; margin-left: 0.15rem; }
+.prose a.backref { margin-left: 0.15rem; color: var(--link); text-decoration: underline; }
 
 /* legend */
 .legend { margin: 0 0 2rem; display: grid; max-width: var(--measure); border-top: 3px solid var(--ink); }
@@ -344,7 +345,7 @@ button { font: inherit; color: inherit; }
   display: inline-flex; align-items: center; min-height: 2.9rem; padding: 0 1.1rem; border-radius: 10px; border: 1.5px solid var(--rule);
   background: var(--surface); color: var(--ink); font-weight: 700; text-decoration: none; cursor: pointer;
 }
-.wk-btn-primary { background: var(--floor); color: var(--floor-ink); border-color: var(--floor); }
+.wk-btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .wk-btn-quiet { border-color: transparent; background: none; color: var(--muted); font-weight: 400; }
 .wk-toggle { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.9rem; cursor: pointer; }
 .wk-toggle input { width: 1.3rem; height: 1.3rem; accent-color: var(--plate-a); }
