@@ -15,6 +15,7 @@ valid_from: 2026-09-23
 
 - **2 days a week, full body**: at the same weekly volume, a split and full-body training give the same hypertrophy. With only 2 sessions a week, training every muscle each session lets you hit each one twice a week ([Volume and Frequency](../k/volume-frequency/))
 - **Volume**: 8–12 sets per muscle per week. Returns shrink as volume rises, and 5–10 sets per week is the most efficient. Right after a restart, you can grow on even less
+- **How to restart**: start light for the first 2 weeks. This greatly reduces the soreness and muscle damage that follow ([Returning After a Long Break](../k/retraining/))
 - **Effort**: RIR 1–2 is enough. Training to failure gives about the same hypertrophy and only adds fatigue ([Effort, Load, and Rest](../k/effort-load-rest/))
 - **Exercises**: prioritize ones that load the muscle in its stretched position ([Range of Motion and Exercise Selection](../k/range-of-motion/))
 
@@ -24,11 +25,14 @@ Alternate Day A and Day B. Leave at least 2 days between sessions (e.g., Mon A a
 
 | Weeks | Goal | Sets | RIR |
 | --- | --- | --- | --- |
-| 1–2 | Ease in. Relearn form and get a feel for the weights | **2 sets** of each exercise in the tables below | 3 (3 reps left) |
-| 3–8 | Main phase | As in the tables below | Compounds 1–2, isolation 0–1 |
-| 9–12 | Push further | If you are still progressing, +1 set each day for lateral raises and arms | Same as above |
+| Week 1 | Ease in. Relearn form and get a feel for the weights | **2 sets** of each exercise in the tables below | 3–4 |
+| Week 2 | Ease in | **2 sets** of each exercise | 2–3 |
+| Weeks 3–8 | Main phase | As in the tables below | Compounds 1–2, isolation 0–1 |
+| Weeks 9–12 | Push further | If you are still progressing, +1 set each day for lateral raises and arms | Same as above |
 
-In week 1, start with weights that feel easy. After a long break, the soreness from the first session is the worst. From the second session on, the same workout hurts much less.
+For the first 2 weeks, don't train to failure, and don't do drop sets or slow eccentrics. Starting light greatly reduces soreness and muscle damage from week 3 on. This protection fades after a 3-week gap, so don't take time off in the first few weeks ([Returning After a Long Break](../k/retraining/)).
+
+If your urine turns cola-colored, or your arms swell badly and hurt, get medical care right away.
 
 ## Day A
 
@@ -78,7 +82,7 @@ Every muscle stays at 6 sets or fewer per session. From week 9, add sets for the
 ## Progression
 
 - **Double progression**: when every set reaches the top of the rep range at the target RIR, add weight next session. Add 2.5kg on barbells, or one step on dumbbells and cables
-- For the first few weeks after a restart, the weight will go up almost every session. This is your old muscle and neural adaptations coming back
+- For the first few weeks after a restart, the weight will go up almost every session. This is mainly your strength and feel for form coming back. Whether muscle size comes back faster up to where it was is unknown for breaks of several years
 - If an exercise shows no progress in reps or weight for 2 weeks in a row, the weekly review will flag it. First check sleep and food. If it still stalls, swap the exercise
 - After 12 weeks, look at the log and rebuild the program
 
