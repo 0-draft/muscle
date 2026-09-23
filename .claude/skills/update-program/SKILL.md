@@ -11,7 +11,7 @@ description: Propose changes to the training program from the last weeks of revi
 2. Run `node scripts/review.mjs` for the current week.
 3. Propose a change list. For each item give: what changes, why (log data), and which knowledge claim supports it (page and grade). Keep lifts that are still progressing. Change only what is stalled or off-target.
 4. Wait for approval. The user decides the split and which body parts are trained. Currently legs are excluded by choice; present leg options only if asked or if the user brings it up.
-5. Apply to `program/ja/current.md` first, then mirror to `program/en/current.md`. Update `valid_from` to the start date. Recompute the weekly fractional set table (primary 1, secondary 0.5, mapping in `data/exercises.json`) and add any new exercise ids there.
-6. Run `npx --yes markdownlint-cli2 "program/**/*.md"` and `npm run build`.
+5. Exercises, sets, reps, RIR, rest and phases live in `program/plan.json` (the workout screen renders from it; set `start` to the first training day). Rationale, the weekly fractional set table (primary 1, secondary 0.5, mapping in `data/exercises.json`) and nutrition live in `program/ja/current.md`, mirrored to `program/en/current.md`. Update `valid_from`, and add any new exercise ids to `data/exercises.json` with both names.
+6. Run `npm run lint`, `npm test` (checks plan.json against the exercise map and the per-session volume ceiling) and `npm run build`.
 
 Commit the program change separately from log or knowledge changes.

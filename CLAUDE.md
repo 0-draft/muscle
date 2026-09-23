@@ -5,7 +5,7 @@ Evidence-graded hypertrophy notes plus a personal training log. The site (Astro,
 ## Layout
 
 - `knowledge/{ja,en}/<slug>.md`: one topic per file, graded claims (`> [!A]`..`> [!D]`), PMID-backed references. Japanese is written first; English mirrors it exactly.
-- `program/{ja,en}/current.md`: the program in effect.
+- `program/{ja,en}/current.md`: the program's rationale, weekly set table and nutrition. `program/plan.json`: exercises, sets, reps, RIR, rest and phases — the single source for the workout screen.
 - `log/`: training log (`training/YYYY-MM.txt`) and `body.csv`. Format in `log/README.md`.
 - `data/exercises.json`: exercise id → muscles (primary 1 set, secondary 0.5).
 - `goals.md`: process and outcome goals the weekly review checks.
