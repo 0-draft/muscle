@@ -1,0 +1,11 @@
+export const day: (s: string) => Date;
+export const iso: (d: Date) => string;
+export const addDays: (d: Date, n: number) => Date;
+export const inRange: (d: Date, from: Date, to: Date) => boolean;
+export function readBody(root: string): unknown;
+export const weightOn: (body: unknown, date: Date) => number;
+export function readTraining(root: string, exercises: unknown, body?: unknown): unknown;
+export const e1rm: (s: { kg: number; reps: number; rir: number | null }) => number;
+export function muscleSets(sessions: unknown, exercises: unknown): unknown;
+export const tonnage: (session: unknown) => number;
+export function personalRecords(sessions: unknown): unknown;
