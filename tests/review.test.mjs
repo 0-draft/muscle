@@ -42,3 +42,15 @@ test('an empty week says so instead of failing', () => {
   assert.match(out, /No weigh-ins this week/);
   assert.match(out, /no sessions logged/);
 });
+
+test('an empty lifts table says so instead of printing only a header', () => {
+  const out = run('--end', '2026-08-01');
+  assert.match(out, /\| – \| – \| – \| no sessions logged \|/);
+});
+
+test('weeks before the program start do not count as missed sessions', () => {
+  // start 2026-09-14: the week before 09-15..09-21 is 09-08..09-14, which begins before the start
+  assert.doesNotMatch(run('--end', '2026-09-21'), /two weeks running/);
+  // 09-28..10-04 and 10-05..10-11 are both inside the program with no sessions
+  assert.match(run('--end', '2026-10-11'), /two weeks running/);
+});

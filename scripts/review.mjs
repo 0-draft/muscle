@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Weekly review: parses log/ and prints a markdown summary for the week ending on --end (default today).
 // Usage: node scripts/review.mjs [--end YYYY-MM-DD] [--root DIR]
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { isExercise, tokyoDate } from './lib/log-format.mjs';
 import { addDays, day, e1rm, inRange, iso, muscleSets as countMuscleSets, readBody, readTraining } from './lib/log-data.mjs';
@@ -15,6 +15,9 @@ const arg = (name) => {
 const ROOT = arg('root') ? resolve(arg('root')) : new URL('..', import.meta.url).pathname;
 const exercises = JSON.parse(readFileSync(join(ROOT, 'data/exercises.json'), 'utf8'));
 const PLANNED_SESSIONS = 2;
+// Weeks before the program's start date aren't missed sessions; fixtures may have no plan.
+const planPath = join(ROOT, 'program/plan.json');
+const programStart = existsSync(planPath) ? day(JSON.parse(readFileSync(planPath, 'utf8')).start) : null;
 // 2-day restart program aims for 8–12 fractional sets per muscle; above 20 adds little (knowledge/volume-frequency).
 const TARGET = { min: 8, max: 20 };
 const end = day(arg('end') ?? tokyoDate());
@@ -50,7 +53,8 @@ const weighIns = body.filter((b) => b.weight && inRange(b.date, weekStart, end))
 out.push(`- Sessions logged: ${weekSessions.length} / ${PLANNED_SESSIONS} planned`);
 out.push(`- Weigh-ins: ${weighIns} / 7`);
 const prevSessions = sessions.filter((s) => inRange(s.date, addDays(weekStart, -7), addDays(weekStart, -1))).length;
-if (weekSessions.length < PLANNED_SESSIONS && prevSessions < PLANNED_SESSIONS)
+const prevWeekInProgram = !programStart || addDays(weekStart, -7) >= programStart;
+if (weekSessions.length < PLANNED_SESSIONS && prevSessions < PLANNED_SESSIONS && prevWeekInProgram)
   out.push('- Fewer sessions than planned two weeks running. Worth checking whether the schedule still fits.');
 out.push('');
 
@@ -87,6 +91,7 @@ for (const id of ids) {
   if (before !== null && now !== null) trend = now > before * 1.005 ? 'up (PR window)' : now < before * 0.97 ? 'down' : 'flat';
   out.push(`| ${isExercise(exercises, id) ? exercises[id].en : id} | ${fmt(now)} | ${fmt(before)} | ${trend} |`);
 }
+if (!ids.length) out.push('| – | – | – | no sessions logged |');
 out.push('');
 
 if (problems.length) {
