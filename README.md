@@ -2,6 +2,8 @@
 
 An evidence-graded notebook on building muscle, a training program built from it, and a training log that reviews itself every week.
 
+A personal log, built for one lifter, not as a product. Issues and PRs from others aren't expected.
+
 **Site: <https://0-draft.github.io/muscle/>** (English) · [日本語](https://0-draft.github.io/muscle/ja/) · [README（日本語）](README.ja.md)
 
 ## What's here
@@ -100,3 +102,7 @@ npm run review -- --end 2026-09-30
 ## Disclaimer
 
 Personal research notes, not medical advice. Numbers are study averages; test them against your own log.
+
+## License
+
+[CC BY 4.0](LICENSE).
