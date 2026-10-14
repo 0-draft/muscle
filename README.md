@@ -102,3 +102,7 @@ npm run review -- --end 2026-09-30
 ## Disclaimer
 
 Personal research notes, not medical advice. Numbers are study averages; test them against your own log.
+
+## License
+
+[CC BY 4.0](LICENSE).
