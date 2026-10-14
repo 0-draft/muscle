@@ -2,6 +2,8 @@
 
 An evidence-graded notebook on building muscle, a training program built from it, and a training log that reviews itself every week.
 
+A personal log, built for one lifter, not as a product. Issues and PRs from others aren't expected.
+
 **Site: <https://0-draft.github.io/muscle/>** (English) · [日本語](https://0-draft.github.io/muscle/ja/) · [README（日本語）](README.ja.md)
 
 ## What's here

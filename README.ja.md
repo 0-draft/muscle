@@ -2,6 +2,8 @@
 
 筋肥大について論文で調べた知見をまとめたノートと、それをもとに組んだメニュー、そして毎週自動でふり返るトレーニング記録のリポジトリ。
 
+自分ひとりのための記録で、プロダクトとして作ってはいない。他の人からの issue や PR は想定していない。
+
 **サイト: <https://0-draft.github.io/muscle/ja/>**（日本語） · [English](https://0-draft.github.io/muscle/) · [README (English)](README.md)
 
 ## 中身
